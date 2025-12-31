@@ -191,11 +191,12 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
                     </span>
                   </div>
 
-                  <div className="absolute bottom-6 left-6 right-6 z-20">
-                    <p className="text-[9px] font-black uppercase tracking-[0.2em] text-red-500 mb-1">
+                  {/* AJUSTE AQUI: Otimização de padding e tamanho de fonte responsivo */}
+                  <div className="absolute bottom-6 left-3 right-3 sm:left-6 sm:right-6 z-20">
+                    <p className="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em] text-red-500 mb-1">
                       {p.pos}
                     </p>
-                    <h4 className="text-xl font-black uppercase italic leading-none text-white truncate">
+                    <h4 className="text-base sm:text-xl font-black uppercase italic leading-none text-white overflow-hidden text-ellipsis whitespace-nowrap">
                       {p.name}
                     </h4>
                     <div className="w-0 h-[2px] bg-red-600 mt-3 group-hover:w-full transition-all duration-500" />
