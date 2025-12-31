@@ -67,12 +67,27 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
         <LandingScreen key="landing" onEnter={handleEnter} />
       ) : (
         <motion.div
-          key="main-content"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-          className="relative"
-        >
+  key="main-content"
+  initial={{ 
+    opacity: 0, 
+    scale: 1.1,      // Começa "perto" (estilo zoom)
+    filter: "blur(20px)" // Começa desfocado
+  }}
+  animate={{ 
+    opacity: 1, 
+    scale: 1,        // Ajusta ao tamanho real
+    filter: "blur(0px)" // Limpa a imagem
+  }}
+  exit={{ 
+    opacity: 0, 
+    scale: 0.95 
+  }}
+  transition={{ 
+    duration: 1.2, 
+    ease: [0.22, 1, 0.36, 1] // Curva suave "Quintic"
+  }}
+  className="relative"
+>
           {/* Hero Section Abstrato Premium */}
           <section className="relative h-screen flex items-center justify-center overflow-hidden">
             <div className="absolute inset-0 z-0 bg-[#020617]">
