@@ -42,6 +42,16 @@ export default function RootLayout({
 
   return (
     <html lang="pt-pt">
+      <head>
+        {/* CONFIGURAÇÃO DO FAVICON E ÍCONE DA APP */}
+        <title>São Mamede d'Este FC</title>
+        <link rel="icon" href="https://i.imgur.com/eqWlwr7.png" type="image/png" />
+        <link rel="shortcut icon" href="https://i.imgur.com/eqWlwr7.png" type="image/png" />
+        <link rel="apple-touch-icon" href="https://i.imgur.com/eqWlwr7.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="SMFC" />
+      </head>
       <body className="bg-[#020617] text-white antialiased overflow-x-hidden">
         {/* AJUSTE: A Navbar agora só aparece se mounted for true E isLanding for false */}
         {mounted && !isLanding && (
