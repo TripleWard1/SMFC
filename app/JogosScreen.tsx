@@ -41,7 +41,6 @@ export default function JogosScreen() {
 
   const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQmNe82uPD4n31biJ89tmpvFXHW9F7cYXy5GxgqWf0em9cveQzO2Y2bzyAyLC_1RQ5v7tBP8ahO74Ci/pub?output=csv';
 
-  // --- DADOS DA CLASSIFICAÇÃO (IMAGEM) ---
   const classificacao = [
     { pos: 1, equipa: 'Soarense', p: 25, j: 10, v: 8, e: 1, d: 1, gm: 25, gs: 10, dg: 15 },
     { pos: 2, equipa: 'ACD Serzedelo S. Pedro', p: 21, j: 10, v: 6, e: 3, d: 1, gm: 36, gs: 13, dg: 23 },
@@ -59,7 +58,6 @@ export default function JogosScreen() {
     { pos: 14, equipa: 'GD Peões', p: 0, j: 10, v: 0, e: 0, d: 10, gm: 3, gs: 50, dg: -47 },
   ];
 
-  // --- CALENDÁRIO PRÓXIMOS JOGOS (IMAGEM) ---
   const proximosJogos = [
     { date: '11/01/2026', time: '15:00', home: 'GD Figueiredo', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J11', local: '(F)' },
     { date: '25/01/2026', time: '15:00', home: "São Mamede d'Este FC", away: 'ACD Serzedelo S. Pedro', comp: 'AF Braga 1ª Divisão B', jornada: 'J12', local: '(C)' },
@@ -190,13 +188,13 @@ export default function JogosScreen() {
     <div className="min-h-screen bg-[#020617] pt-28 pb-20 px-4">
       <div className="max-w-5xl mx-auto">
         
-        {/* SUB-NAVEGAÇÃO */}
-        <div className="flex justify-center gap-2 mb-10 bg-white/5 p-1 rounded-full border border-white/10 w-fit mx-auto">
+        {/* SUB-NAVEGAÇÃO - Ajustada para Mobile (Wrap e Centralização) */}
+        <div className="flex flex-wrap justify-center gap-2 mb-10 bg-white/5 p-1.5 rounded-3xl md:rounded-full border border-white/10 w-full max-w-fit mx-auto">
           {['Resultados', 'Próximos', 'Classificação'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveSubTab(tab)}
-              className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
+              className={`px-4 md:px-6 py-2 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all ${
                 activeSubTab === tab ? 'bg-red-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -299,15 +297,16 @@ export default function JogosScreen() {
                       <span className="font-black uppercase text-xs sm:text-sm text-white">{jogo.away}</span>
                     </div>
                   </div>
-                  <div className="bg-white/5 px-4 py-2 rounded-lg text-[9px] font-black text-slate-500 uppercase">{jogo.local === '(C)' ? 'Casa' : 'Fora'}</div>
+                  <div className="bg-white/5 px-4 py-2 rounded-lg text-[9px] font-black text-slate-500 uppercase self-end md:self-center">{jogo.local === '(C)' ? 'Casa' : 'Fora'}</div>
                 </div>
               ))}
             </motion.div>
           )}
 
           {activeSubTab === 'Classificação' && (
-            <motion.div key="classificacao" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="overflow-x-auto rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl">
-              <table className="w-full text-left border-collapse">
+            /* TABELA - Adicionado overflow-x-auto para scroll horizontal em mobile */
+            <motion.div key="classificacao" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="overflow-x-auto rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl scrollbar-hide">
+              <table className="w-full text-left border-collapse min-w-[700px]">
                 <thead>
                   <tr className="bg-white/5 text-[10px] font-black uppercase tracking-widest text-slate-400 border-b border-white/10">
                     <th className="px-6 py-5">#</th>
@@ -328,7 +327,7 @@ export default function JogosScreen() {
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           <img src={getLogo(item.equipa)} className="w-6 h-6 object-contain" alt="" />
-                          <span className={`font-black uppercase italic text-xs ${item.equipa.includes("São Mamede") ? 'text-red-500' : 'text-white'}`}>{item.equipa}</span>
+                          <span className={`font-black uppercase italic text-xs whitespace-nowrap ${item.equipa.includes("São Mamede") ? 'text-red-500' : 'text-white'}`}>{item.equipa}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-center font-black text-white">{item.p}</td>
@@ -336,7 +335,7 @@ export default function JogosScreen() {
                       <td className="px-6 py-4 text-center text-emerald-500 font-bold">{item.v}</td>
                       <td className="px-6 py-4 text-center text-slate-400 font-bold">{item.e}</td>
                       <td className="px-6 py-4 text-center text-red-500 font-bold">{item.d}</td>
-                      <td className="px-6 py-4 text-center text-slate-400 text-xs">{item.gm}-{item.gs}</td>
+                      <td className="px-6 py-4 text-center text-slate-400 text-xs whitespace-nowrap">{item.gm}-{item.gs}</td>
                       <td className={`px-6 py-4 text-center font-bold ${item.dg >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>{item.dg > 0 ? `+${item.dg}` : item.dg}</td>
                     </tr>
                   ))}
