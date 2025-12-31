@@ -1,6 +1,8 @@
 'use client';
-import { motion } from 'framer-motion';
-import { ArrowRight, ShieldCheck, Timer } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight, ShieldCheck, Timer, UserCircle } from 'lucide-react';
+import { useState } from 'react';
+import LandingScreen from './LandingScreen';
 
 const players = [
   {
@@ -38,6 +40,7 @@ const players = [
 ];
 
 export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
+  
   return (
     <div className="relative">
       {/* Hero Section Abstrato Premium */}
