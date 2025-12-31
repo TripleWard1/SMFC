@@ -16,12 +16,16 @@ export default function RootLayout({
 }) {
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState('Home');
+  // NOVO ESTADO: Controla se estamos na landing page ou no site
+  const [isLanding, setIsLanding] = useState(true);
 
   useEffect(() => {
     setMounted(true);
 
     const handleMudarAba = (e: any) => {
       setActiveTab(e.detail);
+      // Quando mudar a aba (clicar em entrar), esconde a landing e mostra a nav
+      setIsLanding(false);
     };
 
     window.addEventListener('mudarAba', handleMudarAba);
@@ -39,12 +43,11 @@ export default function RootLayout({
   return (
     <html lang="pt-pt">
       <body className="bg-[#020617] text-white antialiased overflow-x-hidden">
-        {mounted && (
+        {/* AJUSTE: A Navbar agora só aparece se mounted for true E isLanding for false */}
+        {mounted && !isLanding && (
           <nav className="fixed top-6 left-0 right-0 z-[9999] px-2 flex justify-center pointer-events-none">
-            {/* AJUSTE: max-w-[98vw] para usar quase todo o ecrã no mobile e padding lateral mínimo (px-2) */}
             <div className="relative flex items-center bg-[#0a0f1e]/90 backdrop-blur-2xl border border-white/10 rounded-full px-2 sm:px-6 py-2 shadow-[0_20px_40px_rgba(0,0,0,0.7)] pointer-events-auto max-w-[98vw] sm:max-w-none">
               
-              {/* AJUSTE: Redução drástica da margem da logo (mr-2) para ganhar espaço no mobile */}
               <div className="relative w-8 h-8 sm:w-12 sm:h-12 mr-2 sm:mr-8 flex items-center justify-center flex-shrink-0">
                 <img
                   src="https://i.imgur.com/eqWlwr7.png"
@@ -53,7 +56,6 @@ export default function RootLayout({
                 />
               </div>
 
-              {/* AJUSTE: gap-0.5 no mobile para aproximar os botões e overflow-x-auto com barra escondida */}
               <div className="flex items-center gap-0.5 sm:gap-4 overflow-x-auto no-scrollbar scroll-smooth">
                 {navItems.map((item) => (
                   <button
@@ -77,9 +79,8 @@ export default function RootLayout({
                           : 'text-slate-400'
                       }`}
                     >
-                      {/* AJUSTE: Texto simplificado para "Equipa Técnica" no mobile */}
                       {item.name === 'Equipa Técnica' ? (
-                        <span><span className="hidden sm:inline">Staff </span></span>
+                        <span>Staff<span className="hidden sm:inline"> Técnica</span></span>
                       ) : item.name}
                     </span>
                     {activeTab === item.name && (
