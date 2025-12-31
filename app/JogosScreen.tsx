@@ -339,52 +339,57 @@ export default function JogosScreen() {
             <motion.div
               key={i}
               whileHover={{ x: 10, backgroundColor: 'rgba(255,255,255,0.08)' }}
-              className="relative bg-white/5 border border-white/10 p-4 rounded-xl flex flex-wrap items-center justify-between gap-4 group transition-all overflow-hidden"
+              className="relative bg-white/5 border border-white/10 p-4 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4 group transition-all overflow-hidden"
             >
-              {/* Gradiente ocupando quase metade da cápsula */}
+              {/* Gradiente */}
               <div
                 className={`absolute left-0 top-0 bottom-0 w-[40%] bg-gradient-to-r ${getResultGradient(
                   jogo
                 )} backdrop-blur-sm`}
               />
 
-              <div className="relative z-10 flex items-center gap-4 min-w-[140px] pl-4">
+              <div className="relative z-10 flex items-center gap-4 min-w-[100px] sm:min-w-[140px] w-full sm:w-auto">
                 <Clock size={14} className="text-slate-500" />
                 <span className="text-[10px] font-bold text-slate-400 uppercase">
                   {jogo.date}
                 </span>
               </div>
-              <div className="relative z-10 flex-1 flex items-center justify-center gap-4">
-                <div className="flex items-center justify-end gap-3 flex-1">
-                  <span className="font-bold uppercase text-xs md:text-sm text-white text-right truncate">
+
+              {/* Ajuste do container de equipas para flex-row mas com wrap se necessário e tamanhos de fonte responsivos */}
+              <div className="relative z-10 flex-1 w-full flex items-center justify-between sm:justify-center gap-2 sm:gap-4">
+                <div className="flex items-center justify-end gap-2 sm:gap-3 flex-1 min-w-0">
+                  <span className="font-bold uppercase text-[10px] md:text-sm text-white text-right leading-tight block break-words">
                     {jogo.homeTeam}
                   </span>
                   <img
                     src={getLogo(jogo.homeTeam)}
-                    className="w-6 h-6 object-contain"
+                    className="w-5 h-5 sm:w-6 sm:h-6 object-contain flex-shrink-0"
                     alt=""
                   />
                 </div>
-                <div className="flex items-center gap-2 bg-[#020617] px-4 py-1.5 rounded-lg border border-white/10 group-hover:border-red-600/50">
-                  <span className="font-black text-lg text-white">
+
+                <div className="flex items-center gap-1 sm:gap-2 bg-[#020617] px-3 sm:px-4 py-1 sm:py-1.5 rounded-lg border border-white/10 group-hover:border-red-600/50 flex-shrink-0">
+                  <span className="font-black text-base sm:text-lg text-white">
                     {jogo.scoreHome}
                   </span>
                   <span className="text-red-600 font-bold">-</span>
-                  <span className="font-black text-lg text-white">
+                  <span className="font-black text-base sm:text-lg text-white">
                     {jogo.scoreAway}
                   </span>
                 </div>
-                <div className="flex items-center justify-start gap-3 flex-1">
+
+                <div className="flex items-center justify-start gap-2 sm:gap-3 flex-1 min-w-0">
                   <img
                     src={getLogo(jogo.awayTeam)}
-                    className="w-6 h-6 object-contain"
+                    className="w-5 h-5 sm:w-6 sm:h-6 object-contain flex-shrink-0"
                     alt=""
                   />
-                  <span className="font-bold uppercase text-xs md:text-sm text-white text-left truncate">
+                  <span className="font-bold uppercase text-[10px] md:text-sm text-white text-left leading-tight block break-words">
                     {jogo.awayTeam}
                   </span>
                 </div>
               </div>
+
               <div className="relative z-10 hidden lg:block min-w-[150px] text-right text-[9px] font-black text-slate-500 uppercase tracking-widest">
                 {jogo.competition}
               </div>
