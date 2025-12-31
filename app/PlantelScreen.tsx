@@ -1,0 +1,323 @@
+'use client';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ShieldCheck, UserCircle, ArrowLeft } from 'lucide-react';
+
+const allPlayers = [
+  // GUARDA-REDES
+  {
+    id: 1,
+    name: 'José Torres',
+    pos: 'Guarda Redes',
+    no: '5',
+    img: 'https://cdn-img.zerozero.pt/img/jogadores/new/76/42/1387642_jose_torres_20251121125426.jpg',
+    nat: 'PT',
+  },
+  {
+    id: 2,
+    name: 'Rui Nascimento',
+    pos: 'Guarda Redes',
+    no: '17',
+    img: 'https://cdn-img.zerozero.pt/img/jogadores/new/76/43/1387643_rui_nascimento_20251121125426.jpg',
+    nat: 'PT',
+  },
+  // DEFESAS
+  {
+    id: 3,
+    name: 'Marco Ferreira',
+    pos: 'Defesa',
+    no: '3',
+    img: 'https://cdn-img.zerozero.pt/img/jogadores/new/07/47/1090747_marco_ferreira_20240806202253.png',
+    nat: 'PT',
+  },
+  {
+    id: 4,
+    name: 'Teixeira',
+    pos: 'Defesa',
+    no: '9',
+    img: 'https://cdn-img.zerozero.pt/img/jogadores/new/31/66/1383166_teixeira_20251114145330.jpg',
+    nat: 'PT',
+  },
+  {
+    id: 5,
+    name: 'Nélson Rodrigues',
+    pos: 'Defesa',
+    no: '10',
+    img: 'https://cdn-img.zerozero.pt/img/jogadores/new/86/75/608675_nelson_rodrigues_20240801203140.jpg',
+    nat: 'PT',
+  },
+  {
+    id: 6,
+    name: 'Eduardo Rauschkolb',
+    pos: 'Defesa',
+    no: '11',
+    img: 'https://cdn-img.zerozero.pt/img/jogadores/46/1176946_20230701005155_eduardo_rauschkolb.png',
+    nat: 'BR',
+  },
+  {
+    id: 7,
+    name: 'Pedro Gonçalves',
+    pos: 'Defesa',
+    no: '16',
+    img: 'https://cdn-img.zerozero.pt/img/jogadores/74/1022574__20230720145325_pedro_goncalves.png',
+    nat: 'PT',
+  },
+  {
+    id: 8,
+    name: 'André Silva',
+    pos: 'Defesa',
+    no: '20',
+    img: 'https://cdn-img.zerozero.pt/img/jogadores/new/55/48/545548_andre_silva_20250620095843.jpg',
+    nat: 'PT',
+  },
+  {
+    id: 9,
+    name: 'Jorge Silva',
+    pos: 'Defesa',
+    no: '21',
+    img: 'https://cdn-img.zerozero.pt/img/jogadores/new/11/90/661190_jorge_silva_20250602140333.jpg',
+    nat: 'PT',
+  },
+  // MÉDIOS
+  {
+    id: 10,
+    name: 'Xandão',
+    pos: 'Médio',
+    no: '1',
+    img: 'https://cdn-img.zerozero.pt/img/jogadores/new/76/93/1387693_xandao_20251121151125.jpg',
+    nat: 'BR',
+  },
+  {
+    id: 11,
+    name: 'Renato Gonçalves',
+    pos: 'Médio',
+    no: '2',
+    img: 'https://cdn-img.zerozero.pt/img/jogadores/72/1022572__20230720145324_renato_goncalves.png',
+    nat: 'PT',
+  },
+  {
+    id: 12,
+    name: 'Mota',
+    pos: 'Médio',
+    no: '8',
+    img: 'https://cdn-img.zerozero.pt/img/jogadores/new/50/39/565039_mota_20250602140243.jpg',
+    nat: 'PT',
+  },
+  {
+    id: 13,
+    name: 'André Pires',
+    pos: 'Médio',
+    no: '12',
+    img: 'https://cdn-img.zerozero.pt/img/jogadores/new/24/42/462442_andre_pires_20250602140555.jpg',
+    nat: 'PT',
+  },
+  {
+    id: 14,
+    name: 'Márcio Olimar',
+    pos: 'Médio',
+    no: '13',
+    img: 'https://cdn-img.zerozero.pt/img/jogadores/new/76/49/1347649_marcio_olimar_20250926102253.jpg',
+    nat: 'AO',
+  },
+  {
+    id: 15,
+    name: 'Diogo Sá Rodrigues',
+    pos: 'Médio',
+    no: '19',
+    img: 'https://cdn-img.zerozero.pt/img/jogadores/new/76/41/1387641_diogo_sa_rodrigues_20251121125425.jpg',
+    nat: 'PT',
+  },
+  // AVANÇADOS
+  {
+    id: 16,
+    name: 'André Braga',
+    pos: 'Avançado',
+    no: '4',
+    img: 'https://cdn-img.zerozero.pt/img/jogadores/new/69/29/1386929_andre_braga_20251120120357.jpg',
+    nat: 'BR',
+  },
+  {
+    id: 17,
+    name: 'Renato',
+    pos: 'Avançado',
+    no: '6',
+    img: 'https://cdn-img.zerozero.pt/img/jogadores/new/94/69/1039469_renato_20250620100000.jpg',
+    nat: 'PT',
+  },
+  {
+    id: 18,
+    name: 'Rodrigo Aguiar',
+    pos: 'Avançado',
+    no: '7',
+    img: 'https://cdn-img.zerozero.pt/img/jogadores/new/86/51/2808651_rodrigo_araujo_20251119230716.jpg',
+    nat: 'BR',
+  },
+  {
+    id: 19,
+    name: 'João Barreiros',
+    pos: 'Avançado',
+    no: '14',
+    img: 'https://cdn-img.zerozero.pt/img/jogadores/new/25/66/952566_joao_barreiros__20240812135045.jpg',
+    nat: 'PT',
+  },
+  {
+    id: 20,
+    name: 'Denilson Campos',
+    pos: 'Avançado',
+    no: '15',
+    img: 'https://cdn-img.zerozero.pt/img/jogadores/new/01/02/1350102_denilson_silva_campos_20250930125523.jpg',
+    nat: 'AO',
+  },
+  {
+    id: 21,
+    name: 'David Simões',
+    pos: 'Avançado',
+    no: '18',
+    img: 'https://cdn-img.zerozero.pt/img/jogadores/new/85/02/678502_david_simoes_20250602140513.jpg',
+    nat: 'PT',
+  },
+];
+
+const categories = ['Todos', 'Guarda Redes', 'Defesa', 'Médio', 'Avançado'];
+
+export default function PlantelScreen() {
+  const [filter, setFilter] = useState('Todos');
+
+  const filteredPlayers =
+    filter === 'Todos'
+      ? allPlayers
+      : allPlayers.filter((p) => p.pos === filter);
+
+  return (
+    <div className="min-h-screen bg-[#020617] pt-32 pb-20 px-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header Imersivo */}
+        <header className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div>
+            <div className="flex items-center gap-3 mb-4 text-red-500">
+              <ShieldCheck size={24} />
+              <span className="font-black uppercase tracking-[0.4em] text-xs">
+                SÃO MAMEDE FUTEBOL CLUBE
+              </span>
+            </div>
+            <h1 className="text-6xl md:text-8xl font-black italic uppercase tracking-tighter text-white leading-none">
+              O{' '}
+              <span
+                className="text-transparent"
+                style={{ WebkitTextStroke: '2px white' }}
+              >
+                Plantel
+              </span>
+            </h1>
+          </div>
+          <div className="text-right">
+            <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px]">
+              Temporada 2025 / 2026
+            </p>
+          </div>
+        </header>
+
+        {/* Filtros de Posição */}
+        <div className="flex flex-wrap gap-2 mb-20 bg-white/5 p-1.5 rounded-2xl border border-white/10 backdrop-blur-xl w-fit">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setFilter(cat)}
+              className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
+                filter === cat
+                  ? 'bg-red-600 text-white shadow-[0_0_20px_rgba(220,38,38,0.3)]'
+                  : 'text-slate-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Lista de Jogadores com Separadores */}
+        <div className="space-y-24">
+          {categories
+            .filter((c) => c !== 'Todos')
+            .map((cat) => {
+              const playersInCat = filteredPlayers.filter((p) => p.pos === cat);
+              if (playersInCat.length === 0) return null;
+
+              return (
+                <section key={cat} className="relative">
+                  {/* Separador de Posição */}
+                  <div className="flex items-center gap-6 mb-10">
+                    <h2 className="text-2xl font-black uppercase italic text-red-600 whitespace-nowrap">
+                      {cat}s
+                    </h2>
+                    <div className="w-full h-[1px] bg-gradient-to-r from-red-600/50 to-transparent" />
+                  </div>
+
+                  {/* Grelha */}
+                  <motion.div
+                    layout
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+                  >
+                    <AnimatePresence mode="popLayout">
+                      {playersInCat.map((p) => (
+                        <motion.div
+                          key={p.id}
+                          layout
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.9 }}
+                          whileHover={{ y: -10 }}
+                          className="relative aspect-[3/4] bg-[#0a0f1e] border border-white/5 rounded-[2rem] overflow-hidden group shadow-2xl"
+                        >
+                          {/* Overlay de Gradiente */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent z-10" />
+
+                          {/* Número Gigante de Fundo */}
+                          <div className="absolute top-4 right-6 z-0">
+                            <span className="text-7xl font-black italic text-white/[0.03] group-hover:text-red-600/[0.05] transition-colors duration-500">
+                              {p.no}
+                            </span>
+                          </div>
+
+                          {/* Conteúdo Principal */}
+                          <div className="absolute bottom-8 left-8 right-8 z-20">
+                            <div className="flex items-center gap-2 mb-2">
+                              <span className="text-[10px] font-black text-red-500 uppercase tracking-widest">
+                                {p.nat}
+                              </span>
+                              <div className="w-1 h-1 rounded-full bg-slate-700" />
+                              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                                #{p.no}
+                              </span>
+                            </div>
+                            <h3 className="text-2xl font-black uppercase italic leading-none text-white mb-4 group-hover:text-red-500 transition-colors">
+                              {p.name}
+                            </h3>
+                            <div className="w-8 h-1 bg-red-600 group-hover:w-full transition-all duration-700 rounded-full" />
+                          </div>
+
+                          {/* Foto do Jogador */}
+                          <div className="absolute inset-0 z-0">
+                            {p.img ? (
+                              <img
+                                src={p.img}
+                                alt={p.name}
+                                className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 opacity-50 group-hover:opacity-100"
+                              />
+                            ) : (
+                              <div className="absolute inset-0 flex items-center justify-center opacity-[0.03]">
+                                <UserCircle size={180} strokeWidth={1} />
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                  </motion.div>
+                </section>
+              );
+            })}
+        </div>
+      </div>
+    </div>
+  );
+}
