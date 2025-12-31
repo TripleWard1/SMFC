@@ -41,6 +41,7 @@ export default function JogosScreen() {
 
   const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQmNe82uPD4n31biJ89tmpvFXHW9F7cYXy5GxgqWf0em9cveQzO2Y2bzyAyLC_1RQ5v7tBP8ahO74Ci/pub?output=csv';
 
+  // --- DADOS DA CLASSIFICAÇÃO ---
   const classificacao = [
     { pos: 1, equipa: 'Soarense', p: 25, j: 10, v: 8, e: 1, d: 1, gm: 25, gs: 10, dg: 15 },
     { pos: 2, equipa: 'ACD Serzedelo S. Pedro', p: 21, j: 10, v: 6, e: 3, d: 1, gm: 36, gs: 13, dg: 23 },
@@ -58,6 +59,7 @@ export default function JogosScreen() {
     { pos: 14, equipa: 'GD Peões', p: 0, j: 10, v: 0, e: 0, d: 10, gm: 3, gs: 50, dg: -47 },
   ];
 
+  // --- CALENDÁRIO PRÓXIMOS JOGOS ---
   const proximosJogos = [
     { date: '11/01/2026', time: '15:00', home: 'GD Figueiredo', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J11', local: '(F)' },
     { date: '25/01/2026', time: '15:00', home: "São Mamede d'Este FC", away: 'ACD Serzedelo S. Pedro', comp: 'AF Braga 1ª Divisão B', jornada: 'J12', local: '(C)' },
@@ -73,17 +75,15 @@ export default function JogosScreen() {
     { date: '19/04/2026', time: '16:00', home: 'Soarense', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J22', local: '(F)' },
     { date: '26/04/2026', time: '16:00', home: "São Mamede d'Este FC", away: 'Maria da Fonte B', comp: 'AF Braga 1ª Divisão B', jornada: 'J23', local: '(C)' },
     { date: '03/05/2026', time: '16:00', home: 'GD Figueiredo', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J24', local: '(F)' },
-    { date: '10/05/2026', time: '16:00', home: "São Mamede d'Este FC", away: 'ACD Serzedelo S. Pedro', comp: 'AF Braga 1ª Divisão B', jornada: 'J25', local: '(C)' },
-    { date: '17/05/2026', time: '16:00', home: 'Maximinense', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J26', local: '(F)' },
+    { date: '10/05/2026', time: '16:00', home: "São Mamede d'Este FC", away: 'ACD Serzedelo S. Pedro', comp: 'AF Braga 1ª Divisão B', jornada: 'J12', local: '(C)' },
+    { date: '17/05/2026', time: '16:00', home: 'Maximinense', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J13', local: '(F)' },
   ];
 
   const getLogo = (teamName: string) => {
     if (!teamName) return LOGO_PADRAO;
     const nameToSearch = teamName.trim().toLowerCase();
     const foundEntry = Object.entries(LOGOS_EQUIPAS).find(
-      ([key]) =>
-        key.toLowerCase() === nameToSearch ||
-        nameToSearch.includes(key.toLowerCase())
+      ([key]) => key.toLowerCase() === nameToSearch || nameToSearch.includes(key.toLowerCase())
     );
     return foundEntry ? foundEntry[1] : LOGO_PADRAO;
   };
@@ -106,25 +106,21 @@ export default function JogosScreen() {
       if (type === 'loss') return 'bg-gradient-to-r from-red-600/30 via-slate-900/80 to-slate-900';
       return 'bg-gradient-to-r from-slate-600/30 via-slate-900/80 to-slate-900';
     }
-
-    if (type === 'win') return 'from-emerald-500/40 to-transparent';
-    if (type === 'loss') return 'from-red-500/40 to-transparent';
-    return 'from-slate-500/40 to-transparent';
+    return type === 'win' ? 'from-emerald-500/40 to-transparent' : type === 'loss' ? 'from-red-500/40 to-transparent' : 'from-slate-500/40 to-transparent';
   };
 
+  // 1. Efeito para carregar dados
   useEffect(() => {
     const fetchJogos = async () => {
       try {
         const response = await fetch(`${SHEET_CSV_URL}&t=${new Date().getTime()}`);
         const text = await response.text();
         const rows = text.split(/\r?\n/).filter((row) => row.trim() !== '');
-
         const sheetData = rows.slice(1).map((row) => {
           const columns = row.includes(';') ? row.split(';') : row.split(',');
           const cleanCols = columns.map((col) => col.trim().replace(/^"|"$/g, ''));
           let rawDate = cleanCols[4] || '';
           if (rawDate.length === 5) rawDate += '/2025';
-
           return {
             homeTeam: cleanCols[0] || '',
             scoreHome: cleanCols[1] || '0',
@@ -133,10 +129,8 @@ export default function JogosScreen() {
             date: rawDate,
             competition: cleanCols[5] || 'AF Braga 1ª Divisão',
             stadium: cleanCols[6] || 'Campo das Ribeirinhas',
-            isFromSheet: true,
           };
         });
-
         const historicoFixo = [
           { date: '20/12/2025', homeTeam: 'Maria da Fonte B', scoreHome: '0', scoreAway: '0', awayTeam: "São Mamede d'Este FC", competition: 'AF Braga 1ª Divisão', stadium: 'Pq. Desp. Municipal' },
           { date: '13/12/2025', homeTeam: "São Mamede d'Este FC", scoreHome: '1', scoreAway: '3', awayTeam: 'Soarense', competition: 'AF Braga 1ª Divisão', stadium: 'Campo das Ribeirinhas' },
@@ -150,36 +144,49 @@ export default function JogosScreen() {
           { date: '04/10/2025', homeTeam: "São Mamede d'Este FC", scoreHome: '5', scoreAway: '0', awayTeam: 'GD Peões', competition: 'AF Braga 1ª Divisão', stadium: 'Campo das Ribeirinhas' },
           { date: '28/09/2025', homeTeam: 'GD Pedralva', scoreHome: '3', scoreAway: '1', awayTeam: "São Mamede d'Este FC", competition: 'AF Braga 1ª Divisão', stadium: 'Fora' },
         ];
-
         const todosOsJogos = [...sheetData, ...historicoFixo].filter((j) => j.homeTeam !== '');
-
-        const jogosOrdenados = todosOsJogos.sort((a, b) => {
+        setJogos(todosOsJogos.sort((a, b) => {
           const parseDate = (d: string) => {
             const [day, month, year] = d.split('/');
             return new Date(`${year}-${month}-${day}`).getTime();
           };
-          const dateA = parseDate(a.date);
-          const dateB = parseDate(b.date);
-          if (dateB !== dateA) return dateB - dateA;
-          return 0;
-        });
-
-        setJogos(jogosOrdenados);
-      } catch (error) {
-        console.error('Erro:', error);
-      } finally {
-        setLoading(false);
-      }
+          return parseDate(b.date) - parseDate(a.date);
+        }));
+      } catch (error) { console.error('Erro:', error); } finally { setLoading(false); }
     };
     fetchJogos();
   }, []);
 
-  if (loading)
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#020617]">
-        <Loader2 className="text-red-600 animate-spin" size={40} />
-      </div>
-    );
+useEffect(() => {
+    const handleNavigation = (event: any) => {
+      const target = event.detail;
+      // Se a ordem for para uma destas sub-abas, o componente de Jogos muda internamente
+      if (['Resultados', 'Proximos', 'Classificação'].includes(target)) {
+        setActiveSubTab(target);
+      }
+    };
+
+    window.addEventListener('mudarAba', handleNavigation);
+    return () => window.removeEventListener('mudarAba', handleNavigation);
+  }, [setActiveSubTab]);
+
+  // 2. LOGICA PARA OUVIR A HOME (O que faltava no teu código)
+  useEffect(() => {
+    const handleNavigation = (e: any) => {
+      const target = e.detail;
+      if (['Resultados', 'Proximos', 'Classificação'].includes(target)) {
+        setActiveSubTab(target);
+      }
+    };
+    window.addEventListener('mudarAba', handleNavigation);
+    return () => window.removeEventListener('mudarAba', handleNavigation);
+  }, []);
+
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center bg-[#020617]">
+      <Loader2 className="text-red-600 animate-spin" size={40} />
+    </div>
+  );
 
   const destaque = jogos[0];
   const ultimosConfrontos = jogos.slice(1);
@@ -187,82 +194,68 @@ export default function JogosScreen() {
   return (
     <div className="min-h-screen bg-[#020617] pt-28 pb-20 px-4">
       <div className="max-w-5xl mx-auto">
-        
-        {/* SUB-NAVEGAÇÃO - Ajustada para Mobile (Wrap e Centralização) */}
-        <div className="flex flex-wrap justify-center gap-2 mb-10 bg-white/5 p-1.5 rounded-3xl md:rounded-full border border-white/10 w-full max-w-fit mx-auto">
-          {['Resultados', 'Próximos', 'Classificação'].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveSubTab(tab)}
-              className={`px-4 md:px-6 py-2 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all ${
-                activeSubTab === tab ? 'bg-red-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
+        <div className="flex justify-center gap-2 mb-10 bg-white/5 p-1 rounded-full border border-white/10 w-fit mx-auto">
+        {['Resultados', 'Próximos', 'Classificação'].map((tab) => (
+  <button
+    key={tab}
+    // Ajuste aqui para normalizar o nome da aba
+    onClick={() => setActiveSubTab(tab === 'Próximos' ? 'Proximos' : tab)}
+    className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
+      (activeSubTab === tab || (activeSubTab === 'Proximos' && tab === 'Próximos')) 
+      ? 'bg-red-600 text-white shadow-lg' 
+      : 'text-slate-400 hover:text-white'
+    }`}
+  >
+    {tab}
+  </button>
+))}
         </div>
 
         <AnimatePresence mode="wait">
           {activeSubTab === 'Resultados' && (
             <motion.div key="resultados" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
               {destaque && (
-                <motion.section className={`relative mb-12 rounded-3xl overflow-hidden border border-white/10 shadow-2xl ${getResultGradient(destaque, true)}`}>
-                   <div className="bg-blue-900/40 px-6 py-3 flex flex-wrap justify-center gap-4 text-[10px] font-bold uppercase tracking-widest border-b border-white/5">
-                    <span className="flex items-center gap-2 text-white">
-                      <Calendar size={12} className="text-red-600" /> {destaque.date}
-                    </span>
-                    <span className="flex items-center gap-2 text-white">
-                      <Trophy size={12} className="text-red-600" /> {destaque.competition}
-                    </span>
-                    <span className="flex items-center gap-2 text-white">
-                      <MapPin size={12} className="text-red-600" /> {destaque.stadium}
-                    </span>
+                <section className={`relative mb-12 rounded-3xl overflow-hidden border border-white/10 shadow-2xl ${getResultGradient(destaque, true)}`}>
+                  <div className="bg-blue-900/40 px-6 py-3 flex flex-wrap justify-center gap-4 text-[10px] font-bold uppercase tracking-widest border-b border-white/5">
+                    <span className="flex items-center gap-2 text-white"><Calendar size={12} className="text-red-600" /> {destaque.date}</span>
+                    <span className="flex items-center gap-2 text-white"><Trophy size={12} className="text-red-600" /> {destaque.competition}</span>
+                    <span className="flex items-center gap-2 text-white"><MapPin size={12} className="text-red-600" /> {destaque.stadium}</span>
                   </div>
-                  <div className="p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
-                    <div className="flex-1 flex flex-col items-center text-center">
+                  <div className="p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 text-center">
+                    <div className="flex-1 flex flex-col items-center">
                       <div className="w-24 h-24 mb-4 flex items-center justify-center bg-white/5 rounded-full p-4 border border-white/10 shadow-inner">
-                        <img src={getLogo(destaque.homeTeam)} alt="Home" className="w-full h-full object-contain" />
+                        <img src={getLogo(destaque.homeTeam)} className="w-full h-full object-contain" alt="" />
                       </div>
                       <h3 className="text-xl md:text-2xl font-black uppercase italic text-white">{destaque.homeTeam}</h3>
                     </div>
-                    <div className="flex flex-col items-center">
-                      <div className="flex items-center gap-6 bg-[#020617] px-8 py-4 rounded-2xl border border-red-600/30 shadow-[0_0_30px_rgba(220,38,38,0.2)]">
-                        <span className="text-6xl font-black italic text-white">{destaque.scoreHome}</span>
-                        <span className="text-3xl font-black text-red-600">-</span>
-                        <span className="text-6xl font-black italic text-white">{destaque.scoreAway}</span>
-                      </div>
+                    <div className="flex items-center gap-6 bg-[#020617] px-8 py-4 rounded-2xl border border-red-600/30">
+                      <span className="text-6xl font-black italic text-white">{destaque.scoreHome}</span>
+                      <span className="text-3xl font-black text-red-600">-</span>
+                      <span className="text-6xl font-black italic text-white">{destaque.scoreAway}</span>
                     </div>
-                    <div className="flex-1 flex flex-col items-center text-center">
+                    <div className="flex-1 flex flex-col items-center">
                       <div className="w-24 h-24 mb-4 flex items-center justify-center bg-white/5 rounded-full p-4 border border-white/10 shadow-inner">
-                        <img src={getLogo(destaque.awayTeam)} alt="Away" className="w-full h-full object-contain" />
+                        <img src={getLogo(destaque.awayTeam)} className="w-full h-full object-contain" alt="" />
                       </div>
                       <h3 className="text-xl md:text-2xl font-black uppercase italic text-white">{destaque.awayTeam}</h3>
                     </div>
                   </div>
-                </motion.section>
+                </section>
               )}
               <div className="grid gap-3">
                 {ultimosConfrontos.map((jogo, i) => (
-                  <motion.div key={i} whileHover={{ x: 10, backgroundColor: 'rgba(255,255,255,0.08)' }} className="relative bg-white/5 border border-white/10 p-4 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4 group transition-all overflow-hidden">
+                  <motion.div key={i} whileHover={{ x: 10 }} className="relative bg-white/5 border border-white/10 p-4 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4 overflow-hidden">
                     <div className={`absolute left-0 top-0 bottom-0 w-[40%] bg-gradient-to-r ${getResultGradient(jogo)} backdrop-blur-sm`} />
-                    <div className="relative z-10 flex items-center gap-4 min-w-[100px] sm:min-w-[140px] w-full sm:w-auto">
-                      <Clock size={14} className="text-slate-500" />
-                      <span className="text-[10px] font-bold text-slate-400 uppercase">{jogo.date}</span>
-                    </div>
-                    <div className="relative z-10 flex-1 w-full flex items-center justify-between sm:justify-center gap-2 sm:gap-4">
-                      <div className="flex items-center justify-end gap-2 sm:gap-3 flex-1 min-w-0">
-                        <span className="font-bold uppercase text-[10px] md:text-sm text-white text-right leading-tight block break-words">{jogo.homeTeam}</span>
-                        <img src={getLogo(jogo.homeTeam)} className="w-5 h-5 sm:w-6 sm:h-6 object-contain flex-shrink-0" alt="" />
+                    <div className="relative z-10 flex items-center gap-4 text-slate-400 text-[10px] font-bold uppercase"><Clock size={14} /> {jogo.date}</div>
+                    <div className="relative z-10 flex-1 flex items-center justify-center gap-4">
+                      <div className="flex-1 flex items-center justify-end gap-3 text-right">
+                        <span className="font-bold uppercase text-[10px] md:text-sm text-white">{jogo.homeTeam}</span>
+                        <img src={getLogo(jogo.homeTeam)} className="w-6 h-6 object-contain" alt="" />
                       </div>
-                      <div className="flex items-center gap-1 sm:gap-2 bg-[#020617] px-3 sm:px-4 py-1 sm:py-1.5 rounded-lg border border-white/10 group-hover:border-red-600/50 flex-shrink-0">
-                        <span className="font-black text-base sm:text-lg text-white">{jogo.scoreHome}</span>
-                        <span className="text-red-600 font-bold">-</span>
-                        <span className="font-black text-base sm:text-lg text-white">{jogo.scoreAway}</span>
-                      </div>
-                      <div className="flex items-center justify-start gap-2 sm:gap-3 flex-1 min-w-0">
-                        <img src={getLogo(jogo.awayTeam)} className="w-5 h-5 sm:w-6 sm:h-6 object-contain flex-shrink-0" alt="" />
-                        <span className="font-bold uppercase text-[10px] md:text-sm text-white text-left leading-tight block break-words">{jogo.awayTeam}</span>
+                      <div className="bg-[#020617] px-4 py-1.5 rounded-lg border border-white/10 text-white font-black"><span className="text-lg">{jogo.scoreHome}</span><span className="text-red-600 px-2">-</span><span className="text-lg">{jogo.scoreAway}</span></div>
+                      <div className="flex-1 flex items-center justify-start gap-3">
+                        <img src={getLogo(jogo.awayTeam)} className="w-6 h-6 object-contain" alt="" />
+                        <span className="font-bold uppercase text-[10px] md:text-sm text-white">{jogo.awayTeam}</span>
                       </div>
                     </div>
                   </motion.div>
@@ -271,71 +264,45 @@ export default function JogosScreen() {
             </motion.div>
           )}
 
-          {activeSubTab === 'Próximos' && (
+          {activeSubTab === 'Proximos' && (
             <motion.div key="proximos" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="grid gap-4">
               {proximosJogos.map((jogo, i) => (
-                <div key={i} className="bg-white/5 border border-white/10 p-5 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6 hover:border-red-600/50 transition-all group">
+                <div key={i} className="bg-white/5 border border-white/10 p-5 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6">
                   <div className="flex items-center gap-4">
-                    <div className="bg-red-600/10 p-3 rounded-xl border border-red-600/20 text-red-500 font-black text-xs uppercase text-center min-w-[60px]">
-                      {jogo.jornada}
-                    </div>
+                    <div className="bg-red-600/10 p-3 rounded-xl border border-red-600/20 text-red-500 font-black text-xs uppercase text-center min-w-[60px]">{jogo.jornada}</div>
                     <div>
-                      <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
-                        <Calendar size={12} /> {jogo.date} • <Clock size={12} /> {jogo.time}
-                      </div>
+                      <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-tighter"><Calendar size={12} /> {jogo.date} • <Clock size={12} /> {jogo.time}</div>
                       <div className="text-[9px] font-black text-red-600 uppercase tracking-widest">{jogo.comp}</div>
                     </div>
                   </div>
-                  <div className="flex-1 flex items-center justify-center gap-3 sm:gap-8">
-                    <div className="flex items-center gap-3 flex-1 justify-end">
-                      <span className="font-black uppercase text-xs sm:text-sm text-white text-right">{jogo.home}</span>
-                      <img src={getLogo(jogo.home)} className="w-8 h-8 object-contain" alt="" />
-                    </div>
+                  <div className="flex-1 flex items-center justify-center gap-8">
+                    <div className="flex items-center gap-3 flex-1 justify-end"><span className="font-black uppercase text-xs sm:text-sm text-white">{jogo.home}</span><img src={getLogo(jogo.home)} className="w-8 h-8 object-contain" alt="" /></div>
                     <div className="px-4 py-1 rounded bg-white/5 border border-white/10 text-[10px] font-black text-red-500">VS</div>
-                    <div className="flex items-center gap-3 flex-1">
-                      <img src={getLogo(jogo.away)} className="w-8 h-8 object-contain" alt="" />
-                      <span className="font-black uppercase text-xs sm:text-sm text-white">{jogo.away}</span>
-                    </div>
+                    <div className="flex items-center gap-3 flex-1"><img src={getLogo(jogo.away)} className="w-8 h-8 object-contain" alt="" /><span className="font-black uppercase text-xs sm:text-sm text-white">{jogo.away}</span></div>
                   </div>
-                  <div className="bg-white/5 px-4 py-2 rounded-lg text-[9px] font-black text-slate-500 uppercase self-end md:self-center">{jogo.local === '(C)' ? 'Casa' : 'Fora'}</div>
+                  <div className="bg-white/5 px-4 py-2 rounded-lg text-[9px] font-black text-slate-500 uppercase">{jogo.local === '(C)' ? 'Casa' : 'Fora'}</div>
                 </div>
               ))}
             </motion.div>
           )}
 
           {activeSubTab === 'Classificação' && (
-            /* TABELA - Adicionado overflow-x-auto para scroll horizontal em mobile */
-            <motion.div key="classificacao" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="overflow-x-auto rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl scrollbar-hide">
-              <table className="w-full text-left border-collapse min-w-[700px]">
-                <thead>
-                  <tr className="bg-white/5 text-[10px] font-black uppercase tracking-widest text-slate-400 border-b border-white/10">
-                    <th className="px-6 py-5">#</th>
-                    <th className="px-6 py-5">Equipa</th>
-                    <th className="px-6 py-5 text-center">P</th>
-                    <th className="px-6 py-5 text-center">J</th>
-                    <th className="px-6 py-5 text-center">V</th>
-                    <th className="px-6 py-5 text-center">E</th>
-                    <th className="px-6 py-5 text-center">D</th>
-                    <th className="px-6 py-5 text-center">GM-GS</th>
-                    <th className="px-6 py-5 text-center">DG</th>
-                  </tr>
+            <motion.div key="classificacao" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="overflow-x-auto rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl">
+              <table className="w-full text-left border-collapse">
+                <thead className="bg-white/5 text-[10px] font-black uppercase text-slate-400 border-b border-white/10">
+                  <tr><th className="px-6 py-5">#</th><th className="px-6 py-5">Equipa</th><th className="px-6 py-5 text-center">P</th><th className="px-6 py-5 text-center">J</th><th className="px-6 py-5 text-center">V</th><th className="px-6 py-5 text-center">E</th><th className="px-6 py-5 text-center">D</th><th className="px-6 py-5 text-center">GM-GS</th><th className="px-6 py-5 text-center">DG</th></tr>
                 </thead>
                 <tbody className="text-sm">
                   {classificacao.map((item) => (
-                    <tr key={item.pos} className={`border-b border-white/5 hover:bg-white/5 transition-colors ${item.equipa.includes("São Mamede") ? 'bg-red-600/10' : ''}`}>
+                    <tr key={item.pos} className={`border-b border-white/5 ${item.equipa.includes("São Mamede") ? 'bg-red-600/10' : ''}`}>
                       <td className="px-6 py-4 font-black text-xs text-slate-500">{item.pos}</td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <img src={getLogo(item.equipa)} className="w-6 h-6 object-contain" alt="" />
-                          <span className={`font-black uppercase italic text-xs whitespace-nowrap ${item.equipa.includes("São Mamede") ? 'text-red-500' : 'text-white'}`}>{item.equipa}</span>
-                        </div>
-                      </td>
+                      <td className="px-6 py-4"><div className="flex items-center gap-3"><img src={getLogo(item.equipa)} className="w-6 h-6 object-contain" alt="" /><span className={`font-black uppercase italic text-xs ${item.equipa.includes("São Mamede") ? 'text-red-500' : 'text-white'}`}>{item.equipa}</span></div></td>
                       <td className="px-6 py-4 text-center font-black text-white">{item.p}</td>
                       <td className="px-6 py-4 text-center text-slate-400 font-bold">{item.j}</td>
                       <td className="px-6 py-4 text-center text-emerald-500 font-bold">{item.v}</td>
                       <td className="px-6 py-4 text-center text-slate-400 font-bold">{item.e}</td>
                       <td className="px-6 py-4 text-center text-red-500 font-bold">{item.d}</td>
-                      <td className="px-6 py-4 text-center text-slate-400 text-xs whitespace-nowrap">{item.gm}-{item.gs}</td>
+                      <td className="px-6 py-4 text-center text-slate-400 text-xs">{item.gm}-{item.gs}</td>
                       <td className={`px-6 py-4 text-center font-bold ${item.dg >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>{item.dg > 0 ? `+${item.dg}` : item.dg}</td>
                     </tr>
                   ))}
