@@ -79,7 +79,7 @@ export default function RootLayout({
                     >
                       {/* AJUSTE: Texto simplificado para "Equipa Técnica" no mobile */}
                       {item.name === 'Equipa Técnica' ? (
-                        <span><span className="hidden sm:inline">Equipa </span>Técnica</span>
+                        <span><span className="hidden sm:inline">Staff </span></span>
                       ) : item.name}
                     </span>
                     {activeTab === item.name && (
