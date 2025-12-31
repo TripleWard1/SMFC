@@ -159,7 +159,7 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
               </button>
             </div>
 
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {players.slice(0, 4).map((p, i) => (
                 <motion.div
                   key={p.id}
@@ -167,39 +167,50 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
                   whileHover={{ y: -10 }}
-                  className="relative aspect-[3/4] bg-[#0f172a] border border-white/5 rounded-[1.5rem] overflow-hidden group shadow-2xl"
+                  className="flex flex-col group"
                 >
-                  <div className="absolute inset-0 z-0">
-                    {p.img ? (
-                      <img
-                        src={p.img}
-                        alt={p.name}
-                        className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 opacity-50 group-hover:opacity-100"
-                      />
-                    ) : (
-                      <div className="flex items-center justify-center h-full opacity-20">
-                        <UserCircle size={48} />
+                  <div className="relative aspect-[4/5] bg-[#0f172a] border border-white/5 rounded-t-[1.5rem] overflow-hidden shadow-2xl">
+                    <div className="absolute inset-0 z-0">
+                      {p.img ? (
+                        <img
+                          src={p.img}
+                          alt={p.name}
+                          className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 opacity-60 group-hover:opacity-100"
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center h-full opacity-20">
+                          <UserCircle size={48} />
+                        </div>
+                      )}
+                    </div>
+                    <div className="absolute top-4 right-4 z-20">
+                      <span className="text-2xl font-black italic text-white/20 group-hover:text-red-600 transition-colors">
+                        #{p.no}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Badges de Informação por Baixo com Design Premium */}
+                  <div className="bg-[#0f172a] border-x border-b border-white/5 rounded-b-[1.5rem] p-4 relative overflow-hidden">
+                    {/* Efeito de brilho no hover */}
+                    <div className="absolute inset-0 bg-red-600/0 group-hover:bg-red-600/5 transition-colors duration-500" />
+                    
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-[8px] font-black bg-red-600 text-white px-2 py-0.5 rounded-sm">
+                          {p.pos}
+                        </span>
+                        <div className="h-[1px] flex-1 bg-white/10" />
                       </div>
-                    )}
-                  </div>
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent z-10" />
-
-                  <div className="absolute top-4 left-4 z-20">
-                    <span className="text-3xl font-black italic text-white/10 group-hover:text-red-600/40 transition-colors">
-                      {p.no}
-                    </span>
-                  </div>
-
-                  {/* AJUSTE AQUI: Otimização de padding e tamanho de fonte responsivo */}
-                  <div className="absolute bottom-6 left-3 right-3 sm:left-6 sm:right-6 z-20">
-                    <p className="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em] text-red-500 mb-1">
-                      {p.pos}
-                    </p>
-                    <h4 className="text-base sm:text-xl font-black uppercase italic leading-none text-white overflow-hidden text-ellipsis whitespace-nowrap">
-                      {p.name}
-                    </h4>
-                    <div className="w-0 h-[2px] bg-red-600 mt-3 group-hover:w-full transition-all duration-500" />
+                      
+                      <h4 className="text-sm md:text-base font-black uppercase italic text-white leading-tight">
+                        {p.name.split(' ').map((part, index) => (
+                          <span key={index} className={index === 1 ? "text-white" : "text-white/70 block"}>
+                            {part}
+                          </span>
+                        ))}
+                      </h4>
+                    </div>
                   </div>
                 </motion.div>
               ))}
