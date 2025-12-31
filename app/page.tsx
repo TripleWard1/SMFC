@@ -1,10 +1,11 @@
 'use client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ShieldCheck, Timer, UserCircle } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import LandingScreen from './LandingScreen';
-// Importa aqui a tua Navbar se ela for um componente separado, ex:
-// import Navbar from '@/components/Navbar'; 
+
+// Variável de controlo global (fora do componente)
+let hasEntered = false;
 
 const players = [
   {
@@ -42,10 +43,20 @@ const players = [
 ];
 
 export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
+  const [isLanding, setIsLanding] = useState(!hasEntered);
 
-  const [isLanding, setIsLanding] = useState(true);
+  useEffect(() => {
+    const handleMudar = () => {
+      hasEntered = true;
+      setIsLanding(false);
+    };
+
+    window.addEventListener('mudarAba', handleMudar);
+    return () => window.removeEventListener('mudarAba', handleMudar);
+  }, []);
 
   const handleEnter = () => {
+    hasEntered = true;
     setIsLanding(false);
     window.dispatchEvent(new CustomEvent('mudarAba', { detail: 'Home' }));
   };
@@ -62,27 +73,15 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
           transition={{ duration: 0.8 }}
           className="relative"
         >
-          {/* A BARRA DE NAVEGAÇÃO FOI MOVIDA PARA AQUI */}
-          {/* Substitui a linha abaixo pelo teu componente real de Navbar se necessário */}
-          <nav className="fixed top-0 w-full z-50"> 
-             {/* O teu código da Navbar (Home, Clube, Plantel, etc) deve estar aqui ou ser chamado como <Navbar /> */}
-          </nav>
-
           {/* Hero Section Abstrato Premium */}
           <section className="relative h-screen flex items-center justify-center overflow-hidden">
             <div className="absolute inset-0 z-0 bg-[#020617]">
-              {/* 1. Imagem com Opacidade Alta e sem o efeito de mistura (mix-blend) que a escurece */}
               <div
                 className="absolute inset-0 bg-cover bg-center opacity-30"
                 style={{
                   backgroundImage: "url('https://i.imgur.com/5xPm9Fl.jpeg')",
                 }}
               />
-
-              {/* 2. ELIMINA OU COMENTA ESTA LINHA ABAIXO PARA TIRAR O PRETO POR CIMA */}
-              {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#020617]/90 to-[#020617]" /> */}
-
-              {/* 3. Brilhos de cor (Opcional: podes mantê-los ou tirar para ficar 100% limpo) */}
               <div className="absolute top-1/4 -left-20 w-96 h-96 bg-red-600/20 blur-[120px] rounded-full animate-pulse" />
               <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-blue-600/10 blur-[120px] rounded-full" />
             </div>
@@ -145,9 +144,7 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
               </button>
             </div>
 
-            {/* Grelha Horizontal Fixa com 4 Colunas */}
             <div className="grid grid-cols-4 gap-4">
-              {/* ADICIONADO .slice(0, 4) AQUI PARA MOSTRAR APENAS 4 */}
               {players.slice(0, 4).map((p, i) => (
                 <motion.div
                   key={p.id}
@@ -157,7 +154,6 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
                   whileHover={{ y: -10 }}
                   className="relative aspect-[3/4] bg-[#0f172a] border border-white/5 rounded-[1.5rem] overflow-hidden group shadow-2xl"
                 >
-                  {/* Espaço para Foto (IMG) - Garante que p.img tem o link correto */}
                   <div className="absolute inset-0 z-0">
                     {p.img ? (
                       <img
@@ -172,17 +168,14 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
                     )}
                   </div>
 
-                  {/* Gradiente de Leitura */}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent z-10" />
 
-                  {/* Número no topo */}
                   <div className="absolute top-4 left-4 z-20">
                     <span className="text-3xl font-black italic text-white/10 group-hover:text-red-600/40 transition-colors">
                       {p.no}
                     </span>
                   </div>
 
-                  {/* Nome e Info no fundo */}
                   <div className="absolute bottom-6 left-6 right-6 z-20">
                     <p className="text-[9px] font-black uppercase tracking-[0.2em] text-red-500 mb-1">
                       {p.pos}

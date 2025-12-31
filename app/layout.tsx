@@ -60,7 +60,11 @@ export default function RootLayout({
                 {navItems.map((item) => (
                   <button
                     key={item.name}
-                    onClick={() => setActiveTab(item.name)}
+                    onClick={() => {
+                      setActiveTab(item.name);
+                      // AJUSTE: Ao clicar em qualquer item da nav, garantimos que isLanding é false
+                      setIsLanding(false);
+                    }}
                     className="group relative flex flex-col sm:flex-row items-center gap-1 sm:gap-2.5 px-3 sm:px-4 py-2 transition-all flex-shrink-0"
                   >
                     <span
@@ -97,6 +101,7 @@ export default function RootLayout({
         )}
 
         <main className="relative z-10">
+          {/* AJUSTE: Passamos o estado isLanding para o HomePage (children) se necessário */}
           {activeTab === 'Home' ? children : null}
           {activeTab === 'Plantel' ? <PlantelScreen /> : null}
           {activeTab === 'Equipa Técnica' ? <EquipaTecnicaScreen /> : null}
