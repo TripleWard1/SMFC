@@ -1,52 +1,35 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { MapPin, Calendar, Trophy, Clock, Loader2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { MapPin, Calendar, Trophy, Clock, Loader2, ListOrdered } from 'lucide-react';
 
 // --- DICIONÁRIO DE EQUIPAS ---
 const LOGOS_EQUIPAS: { [key: string]: string } = {
-  "São Mamede d'Este FC":
-    'https://cdn-img.zerozero.pt/img/logos/equipas/10945_imgbank.png',
-  'São Mamede Futebol Clube':
-    'https://cdn-img.zerozero.pt/img/logos/equipas/10945_imgbank.png',
+  "São Mamede d'Este FC": 'https://cdn-img.zerozero.pt/img/logos/equipas/10945_imgbank.png',
+  'São Mamede Futebol Clube': 'https://cdn-img.zerozero.pt/img/logos/equipas/10945_imgbank.png',
+  "São Mamede d'Este": 'https://cdn-img.zerozero.pt/img/logos/equipas/10945_imgbank.png',
   SMFC: 'https://cdn-img.zerozero.pt/img/logos/equipas/10945_imgbank.png',
-  'ACD Serzedelo':
-    'https://cdn-img.zerozero.pt/img/logos/equipas/89210_imgbank.png',
-  'Arsenal Devesa':
-    'https://cdn-img.zerozero.pt/img/logos/equipas/10951_imgbank.png',
-  'CD Maximinense':
-    'https://cdn-img.zerozero.pt/img/logos/equipas/75/5675_logo_20220905151822_maximinense.png',
-  'FC Sobreposta':
-    'https://cdn-img.zerozero.pt/img/logos/equipas/99/32399_logo_sobreposta.jpg',
-  'GD Figueiredo':
-    'https://cdn-img.zerozero.pt/img/logos/equipas/52/10952_logo_gd_figueiredo.jpg',
-  'GD Guisande':
-    'https://cdn-img.zerozero.pt/img/logos/equipas/55/10955_logo_gd_guisande.jpg',
-  'GD Os Alegrienses':
-    'https://cdn-img.zerozero.pt/img/logos/equipas/04/6704_logo_20230620104652_alegrienses.jpg',
-  'GD Pedralva':
-    'https://cdn-img.zerozero.pt/img/logos/equipas/23/8023_logo_gd_pedralva_20250225112142.png',
-  'GD Peões':
-    'https://cdn-img.zerozero.pt/img/logos/equipas/50/10950_logo_gd_peoes.jpg',
-  'GDR Esporões':
-    'https://cdn-img.zerozero.pt/img/logos/equipas/77786_imgbank.png',
-  'GD Sete Fontes':
-    'https://cdn-img.zerozero.pt/img/logos/equipas/07/77907_logo_gd_sete_fontes.png',
-  'SC Maria Fonte “B”':
-    'https://cdn-img.zerozero.pt/img/logos/equipas/3604_imgbank_1683533049.png',
-  'Soarense SC':
-    'https://cdn-img.zerozero.pt/img/logos/equipas/8016_imgbank.png',
-  'Maria da Fonte B':
-    'https://cdn-img.zerozero.pt/img/logos/equipas/3604_imgbank_1683533049.png',
+  'ACD Serzedelo': 'https://cdn-img.zerozero.pt/img/logos/equipas/89210_imgbank.png',
+  'ACD Serzedelo S. Pedro': 'https://cdn-img.zerozero.pt/img/logos/equipas/89210_imgbank.png',
+  'Arsenal Devesa': 'https://cdn-img.zerozero.pt/img/logos/equipas/10951_imgbank.png',
+  'CD Maximinense': 'https://cdn-img.zerozero.pt/img/logos/equipas/75/5675_logo_20220905151822_maximinense.png',
+  'Maximinense': 'https://cdn-img.zerozero.pt/img/logos/equipas/75/5675_logo_20220905151822_maximinense.png',
+  'FC Sobreposta': 'https://cdn-img.zerozero.pt/img/logos/equipas/99/32399_logo_sobreposta.jpg',
+  'GD Figueiredo': 'https://cdn-img.zerozero.pt/img/logos/equipas/52/10952_logo_gd_figueiredo.jpg',
+  'GD Guisande': 'https://cdn-img.zerozero.pt/img/logos/equipas/55/10955_logo_gd_guisande.jpg',
+  'GD Os Alegrienses': 'https://cdn-img.zerozero.pt/img/logos/equipas/04/6704_logo_20230620104652_alegrienses.jpg',
+  'GD Pedralva': 'https://cdn-img.zerozero.pt/img/logos/equipas/23/8023_logo_gd_pedralva_20250225112142.png',
+  'GD Peões': 'https://cdn-img.zerozero.pt/img/logos/equipas/50/10950_logo_gd_peoes.jpg',
+  'GDR Esporões': 'https://cdn-img.zerozero.pt/img/logos/equipas/77786_imgbank.png',
+  'GD Sete Fontes': 'https://cdn-img.zerozero.pt/img/logos/equipas/07/77907_logo_gd_sete_fontes.png',
+  'SC Maria Fonte “B”': 'https://cdn-img.zerozero.pt/img/logos/equipas/3604_imgbank_1683533049.png',
+  'Soarense SC': 'https://cdn-img.zerozero.pt/img/logos/equipas/8016_imgbank.png',
+  'Maria da Fonte B': 'https://cdn-img.zerozero.pt/img/logos/equipas/3604_imgbank_1683533049.png',
   Soarense: 'https://cdn-img.zerozero.pt/img/logos/equipas/8016_imgbank.png',
-  Sobreposta:
-    'https://cdn-img.zerozero.pt/img/logos/equipas/99/32399_logo_sobreposta.jpg',
-  'Arsenal da Devesa':
-    'https://cdn-img.zerozero.pt/img/logos/equipas/10951_imgbank.png',
-  Alegrienses:
-    'https://cdn-img.zerozero.pt/img/logos/equipas/04/6704_logo_20230620104652_alegrienses.jpg',
-  'AD Oliveirense':
-    'https://cdn-img.zerozero.pt/img/logos/equipas/10940_imgbank.png',
+  Sobreposta: 'https://cdn-img.zerozero.pt/img/logos/equipas/99/32399_logo_sobreposta.jpg',
+  'Arsenal da Devesa': 'https://cdn-img.zerozero.pt/img/logos/equipas/10951_imgbank.png',
+  Alegrienses: 'https://cdn-img.zerozero.pt/img/logos/equipas/04/6704_logo_20230620104652_alegrienses.jpg',
+  'AD Oliveirense': 'https://cdn-img.zerozero.pt/img/logos/equipas/10940_imgbank.png',
 };
 
 const LOGO_PADRAO = 'https://via.placeholder.com/100?text=ESCUDO';
@@ -54,9 +37,47 @@ const LOGO_PADRAO = 'https://via.placeholder.com/100?text=ESCUDO';
 export default function JogosScreen() {
   const [jogos, setJogos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeSubTab, setActiveSubTab] = useState('Resultados');
 
-  const SHEET_CSV_URL =
-    'https://docs.google.com/spreadsheets/d/e/2PACX-1vQmNe82uPD4n31biJ89tmpvFXHW9F7cYXy5GxgqWf0em9cveQzO2Y2bzyAyLC_1RQ5v7tBP8ahO74Ci/pub?output=csv';
+  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQmNe82uPD4n31biJ89tmpvFXHW9F7cYXy5GxgqWf0em9cveQzO2Y2bzyAyLC_1RQ5v7tBP8ahO74Ci/pub?output=csv';
+
+  // --- DADOS DA CLASSIFICAÇÃO (IMAGEM) ---
+  const classificacao = [
+    { pos: 1, equipa: 'Soarense', p: 25, j: 10, v: 8, e: 1, d: 1, gm: 25, gs: 10, dg: 15 },
+    { pos: 2, equipa: 'ACD Serzedelo S. Pedro', p: 21, j: 10, v: 6, e: 3, d: 1, gm: 36, gs: 13, dg: 23 },
+    { pos: 3, equipa: 'GD Figueiredo', p: 20, j: 10, v: 6, e: 2, d: 2, gm: 22, gs: 9, dg: 13 },
+    { pos: 4, equipa: 'Maximinense', p: 19, j: 10, v: 6, e: 1, d: 3, gm: 18, gs: 8, dg: 10 },
+    { pos: 5, equipa: 'Maria da Fonte B', p: 17, j: 9, v: 5, e: 2, d: 2, gm: 23, gs: 10, dg: 13 },
+    { pos: 6, equipa: "São Mamede d'Este", p: 17, j: 10, v: 5, e: 2, d: 3, gm: 24, gs: 16, dg: 8 },
+    { pos: 7, equipa: 'Alegrienses', p: 15, j: 10, v: 5, e: 0, d: 5, gm: 23, gs: 14, dg: 9 },
+    { pos: 8, equipa: 'GD Guisande', p: 14, j: 9, v: 4, e: 2, d: 3, gm: 14, gs: 10, dg: 4 },
+    { pos: 9, equipa: 'GD Sete Fontes', p: 13, j: 10, v: 3, e: 4, d: 3, gm: 13, gs: 13, dg: 0 },
+    { pos: 10, equipa: 'GD Pedralva', p: 12, j: 10, v: 3, e: 3, d: 4, gm: 23, gs: 22, dg: 1 },
+    { pos: 11, equipa: 'GDR Esporões', p: 12, j: 10, v: 3, e: 3, d: 4, gm: 16, gs: 17, dg: -1 },
+    { pos: 12, equipa: 'Sobreposta', p: 9, j: 10, v: 2, e: 3, d: 5, gm: 13, gs: 19, dg: -6 },
+    { pos: 13, equipa: 'Arsenal da Devesa', p: 0, j: 10, v: 0, e: 0, d: 10, gm: 3, gs: 45, dg: -42 },
+    { pos: 14, equipa: 'GD Peões', p: 0, j: 10, v: 0, e: 0, d: 10, gm: 3, gs: 50, dg: -47 },
+  ];
+
+  // --- CALENDÁRIO PRÓXIMOS JOGOS (IMAGEM) ---
+  const proximosJogos = [
+    { date: '11/01/2026', time: '15:00', home: 'GD Figueiredo', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J11', local: '(F)' },
+    { date: '25/01/2026', time: '15:00', home: "São Mamede d'Este FC", away: 'ACD Serzedelo S. Pedro', comp: 'AF Braga 1ª Divisão B', jornada: 'J12', local: '(C)' },
+    { date: '01/02/2026', time: '15:00', home: "São Mamede d'Este FC", away: 'Maximinense', comp: 'AF Braga 1ª Divisão B', jornada: 'J13', local: '(C)' },
+    { date: '15/02/2026', time: '15:00', home: 'GD Pedralva', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J14', local: '(F)' },
+    { date: '22/02/2026', time: '15:00', home: "São Mamede d'Este FC", away: 'GD Peões', comp: 'AF Braga 1ª Divisão B', jornada: 'J15', local: '(C)' },
+    { date: '01/03/2026', time: '15:00', home: 'GDR Esporões', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J16', local: '(F)' },
+    { date: '08/03/2026', time: '15:00', home: "São Mamede d'Este FC", away: 'GD Guisande', comp: 'AF Braga 1ª Divisão B', jornada: 'J17', local: '(C)' },
+    { date: '15/03/2026', time: '15:00', home: 'Alegrienses', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J18', local: '(F)' },
+    { date: '22/03/2026', time: '15:00', home: "São Mamede d'Este FC", away: 'Arsenal da Devesa', comp: 'AF Braga 1ª Divisão B', jornada: 'J19', local: '(C)' },
+    { date: '29/03/2026', time: '16:00', home: 'Sobreposta', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J20', local: '(F)' },
+    { date: '12/04/2026', time: '16:00', home: "São Mamede d'Este FC", away: 'GD Sete Fontes', comp: 'AF Braga 1ª Divisão B', jornada: 'J21', local: '(C)' },
+    { date: '19/04/2026', time: '16:00', home: 'Soarense', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J22', local: '(F)' },
+    { date: '26/04/2026', time: '16:00', home: "São Mamede d'Este FC", away: 'Maria da Fonte B', comp: 'AF Braga 1ª Divisão B', jornada: 'J23', local: '(C)' },
+    { date: '03/05/2026', time: '16:00', home: 'GD Figueiredo', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J24', local: '(F)' },
+    { date: '10/05/2026', time: '16:00', home: "São Mamede d'Este FC", away: 'ACD Serzedelo S. Pedro', comp: 'AF Braga 1ª Divisão B', jornada: 'J25', local: '(C)' },
+    { date: '17/05/2026', time: '16:00', home: 'Maximinense', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J26', local: '(F)' },
+  ];
 
   const getLogo = (teamName: string) => {
     if (!teamName) return LOGO_PADRAO;
@@ -83,10 +104,8 @@ export default function JogosScreen() {
     }
 
     if (isHighlight) {
-      if (type === 'win')
-        return 'bg-gradient-to-r from-emerald-600/30 via-slate-900/80 to-slate-900';
-      if (type === 'loss')
-        return 'bg-gradient-to-r from-red-600/30 via-slate-900/80 to-slate-900';
+      if (type === 'win') return 'bg-gradient-to-r from-emerald-600/30 via-slate-900/80 to-slate-900';
+      if (type === 'loss') return 'bg-gradient-to-r from-red-600/30 via-slate-900/80 to-slate-900';
       return 'bg-gradient-to-r from-slate-600/30 via-slate-900/80 to-slate-900';
     }
 
@@ -98,17 +117,13 @@ export default function JogosScreen() {
   useEffect(() => {
     const fetchJogos = async () => {
       try {
-        const response = await fetch(
-          `${SHEET_CSV_URL}&t=${new Date().getTime()}`
-        );
+        const response = await fetch(`${SHEET_CSV_URL}&t=${new Date().getTime()}`);
         const text = await response.text();
         const rows = text.split(/\r?\n/).filter((row) => row.trim() !== '');
 
         const sheetData = rows.slice(1).map((row) => {
           const columns = row.includes(';') ? row.split(';') : row.split(',');
-          const cleanCols = columns.map((col) =>
-            col.trim().replace(/^"|"$/g, '')
-          );
+          const cleanCols = columns.map((col) => col.trim().replace(/^"|"$/g, ''));
           let rawDate = cleanCols[4] || '';
           if (rawDate.length === 5) rawDate += '/2025';
 
@@ -125,110 +140,20 @@ export default function JogosScreen() {
         });
 
         const historicoFixo = [
-          {
-            date: '20/12/2025',
-            homeTeam: 'Maria da Fonte B',
-            scoreHome: '0',
-            scoreAway: '0',
-            awayTeam: "São Mamede d'Este FC",
-            competition: 'AF Braga 1ª Divisão',
-            stadium: 'Pq. Desp. Municipal',
-          },
-          {
-            date: '13/12/2025',
-            homeTeam: "São Mamede d'Este FC",
-            scoreHome: '1',
-            scoreAway: '3',
-            awayTeam: 'Soarense',
-            competition: 'AF Braga 1ª Divisão',
-            stadium: 'Campo das Ribeirinhas',
-          },
-          {
-            date: '06/12/2025',
-            homeTeam: "São Mamede d'Este FC",
-            scoreHome: 'ADI',
-            scoreAway: '',
-            awayTeam: 'AD Oliveirense',
-            competition: 'AF Braga Taça',
-            stadium: 'Campo das Ribeirinhas',
-          },
-          {
-            date: '29/11/2025',
-            homeTeam: 'GD Sete Fontes',
-            scoreHome: '3',
-            scoreAway: '3',
-            awayTeam: "São Mamede d'Este FC",
-            competition: 'AF Braga 1ª Divisão',
-            stadium: 'Fora',
-          },
-          {
-            date: '22/11/2025',
-            homeTeam: "São Mamede d'Este FC",
-            scoreHome: '4',
-            scoreAway: '1',
-            awayTeam: 'Sobreposta',
-            competition: 'AF Braga 1ª Divisão',
-            stadium: 'Campo das Ribeirinhas',
-          },
-          {
-            date: '15/11/2025',
-            homeTeam: "São Mamede d'Este FC",
-            scoreHome: '5',
-            scoreAway: '2',
-            awayTeam: 'Arsenal da Devesa',
-            competition: 'AF Braga 1ª Divisão',
-            stadium: 'Campo das Ribeirinhas',
-          },
-          {
-            date: '08/11/2025',
-            homeTeam: 'Alegrienses',
-            scoreHome: '1',
-            scoreAway: '2',
-            awayTeam: "São Mamede d'Este FC",
-            competition: 'AF Braga 1ª Divisão',
-            stadium: 'Fora',
-          },
-          {
-            date: '25/10/2025',
-            homeTeam: "São Mamede d'Este FC",
-            scoreHome: '2',
-            scoreAway: '1',
-            awayTeam: 'GD Guisande',
-            competition: 'AF Braga 1ª Divisão',
-            stadium: 'Campo das Ribeirinhas',
-          },
-          {
-            date: '18/10/2025',
-            homeTeam: 'GDR Esporões',
-            scoreHome: '2',
-            scoreAway: '1',
-            awayTeam: "São Mamede d'Este FC",
-            competition: 'AF Braga 1ª Divisão',
-            stadium: 'Fora',
-          },
-          {
-            date: '04/10/2025',
-            homeTeam: "São Mamede d'Este FC",
-            scoreHome: '5',
-            scoreAway: '0',
-            awayTeam: 'GD Peões',
-            competition: 'AF Braga 1ª Divisão',
-            stadium: 'Campo das Ribeirinhas',
-          },
-          {
-            date: '28/09/2025',
-            homeTeam: 'GD Pedralva',
-            scoreHome: '3',
-            scoreAway: '1',
-            awayTeam: "São Mamede d'Este FC",
-            competition: 'AF Braga 1ª Divisão',
-            stadium: 'Fora',
-          },
+          { date: '20/12/2025', homeTeam: 'Maria da Fonte B', scoreHome: '0', scoreAway: '0', awayTeam: "São Mamede d'Este FC", competition: 'AF Braga 1ª Divisão', stadium: 'Pq. Desp. Municipal' },
+          { date: '13/12/2025', homeTeam: "São Mamede d'Este FC", scoreHome: '1', scoreAway: '3', awayTeam: 'Soarense', competition: 'AF Braga 1ª Divisão', stadium: 'Campo das Ribeirinhas' },
+          { date: '06/12/2025', homeTeam: "São Mamede d'Este FC", scoreHome: 'ADI', scoreAway: '', awayTeam: 'AD Oliveirense', competition: 'AF Braga Taça', stadium: 'Campo das Ribeirinhas' },
+          { date: '29/11/2025', homeTeam: 'GD Sete Fontes', scoreHome: '3', scoreAway: '3', awayTeam: "São Mamede d'Este FC", competition: 'AF Braga 1ª Divisão', stadium: 'Fora' },
+          { date: '22/11/2025', homeTeam: "São Mamede d'Este FC", scoreHome: '4', scoreAway: '1', awayTeam: 'Sobreposta', competition: 'AF Braga 1ª Divisão', stadium: 'Campo das Ribeirinhas' },
+          { date: '15/11/2025', homeTeam: "São Mamede d'Este FC", scoreHome: '5', scoreAway: '2', awayTeam: 'Arsenal da Devesa', competition: 'AF Braga 1ª Divisão', stadium: 'Campo das Ribeirinhas' },
+          { date: '08/11/2025', homeTeam: 'Alegrienses', scoreHome: '1', scoreAway: '2', awayTeam: "São Mamede d'Este FC", competition: 'AF Braga 1ª Divisão', stadium: 'Fora' },
+          { date: '25/10/2025', homeTeam: "São Mamede d'Este FC", scoreHome: '2', scoreAway: '1', awayTeam: 'GD Guisande', competition: 'AF Braga 1ª Divisão', stadium: 'Campo das Ribeirinhas' },
+          { date: '18/10/2025', homeTeam: 'GDR Esporões', scoreHome: '2', scoreAway: '1', awayTeam: "São Mamede d'Este FC", competition: 'AF Braga 1ª Divisão', stadium: 'Fora' },
+          { date: '04/10/2025', homeTeam: "São Mamede d'Este FC", scoreHome: '5', scoreAway: '0', awayTeam: 'GD Peões', competition: 'AF Braga 1ª Divisão', stadium: 'Campo das Ribeirinhas' },
+          { date: '28/09/2025', homeTeam: 'GD Pedralva', scoreHome: '3', scoreAway: '1', awayTeam: "São Mamede d'Este FC", competition: 'AF Braga 1ª Divisão', stadium: 'Fora' },
         ];
 
-        const todosOsJogos = [...sheetData, ...historicoFixo].filter(
-          (j) => j.homeTeam !== ''
-        );
+        const todosOsJogos = [...sheetData, ...historicoFixo].filter((j) => j.homeTeam !== '');
 
         const jogosOrdenados = todosOsJogos.sort((a, b) => {
           const parseDate = (d: string) => {
@@ -238,8 +163,6 @@ export default function JogosScreen() {
           const dateA = parseDate(a.date);
           const dateB = parseDate(b.date);
           if (dateB !== dateA) return dateB - dateA;
-          if (a.isFromSheet && !b.isFromSheet) return -1;
-          if (!a.isFromSheet && b.isFromSheet) return 1;
           return 0;
         });
 
@@ -264,138 +187,164 @@ export default function JogosScreen() {
   const ultimosConfrontos = jogos.slice(1);
 
   return (
-    <div className="min-h-screen bg-[#020617] pt-32 pb-20 px-4">
+    <div className="min-h-screen bg-[#020617] pt-28 pb-20 px-4">
       <div className="max-w-5xl mx-auto">
-        {destaque && (
-          <motion.section
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className={`relative mb-12 rounded-3xl overflow-hidden border border-white/10 shadow-2xl ${getResultGradient(
-              destaque,
-              true
-            )}`}
-          >
-            <div className="bg-blue-900/40 px-6 py-3 flex flex-wrap justify-center gap-4 text-[10px] font-bold uppercase tracking-widest border-b border-white/5">
-              <span className="flex items-center gap-2 text-white">
-                <Calendar size={12} className="text-red-600" /> {destaque.date}
-              </span>
-              <span className="flex items-center gap-2 text-white">
-                <Trophy size={12} className="text-red-600" />{' '}
-                {destaque.competition}
-              </span>
-              <span className="flex items-center gap-2 text-white">
-                <MapPin size={12} className="text-red-600" /> {destaque.stadium}
-              </span>
-            </div>
-            <div className="p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
-              <div className="flex-1 flex flex-col items-center text-center">
-                <div className="w-24 h-24 mb-4 flex items-center justify-center bg-white/5 rounded-full p-4 border border-white/10 shadow-inner">
-                  <img
-                    src={getLogo(destaque.homeTeam)}
-                    alt="Home"
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-                <h3 className="text-xl md:text-2xl font-black uppercase italic text-white">
-                  {destaque.homeTeam}
-                </h3>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="flex items-center gap-6 bg-[#020617] px-8 py-4 rounded-2xl border border-red-600/30 shadow-[0_0_30px_rgba(220,38,38,0.2)]">
-                  <span className="text-6xl font-black italic text-white">
-                    {destaque.scoreHome}
-                  </span>
-                  <span className="text-3xl font-black text-red-600">-</span>
-                  <span className="text-6xl font-black italic text-white">
-                    {destaque.scoreAway}
-                  </span>
-                </div>
-              </div>
-              <div className="flex-1 flex flex-col items-center text-center">
-                <div className="w-24 h-24 mb-4 flex items-center justify-center bg-white/5 rounded-full p-4 border border-white/10 shadow-inner">
-                  <img
-                    src={getLogo(destaque.awayTeam)}
-                    alt="Away"
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-                <h3 className="text-xl md:text-2xl font-black uppercase italic text-white">
-                  {destaque.awayTeam}
-                </h3>
-              </div>
-            </div>
-          </motion.section>
-        )}
-
-        <header className="mb-8 flex items-center gap-4">
-          <div className="h-8 w-1 bg-red-600" />
-          <h2 className="text-2xl font-black uppercase italic tracking-tight text-white">
-            Últimos <span className="text-red-600">Confrontos</span>
-          </h2>
-        </header>
-
-        <div className="grid gap-3">
-          {ultimosConfrontos.map((jogo, i) => (
-            <motion.div
-              key={i}
-              whileHover={{ x: 10, backgroundColor: 'rgba(255,255,255,0.08)' }}
-              className="relative bg-white/5 border border-white/10 p-4 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4 group transition-all overflow-hidden"
+        
+        {/* SUB-NAVEGAÇÃO */}
+        <div className="flex justify-center gap-2 mb-10 bg-white/5 p-1 rounded-full border border-white/10 w-fit mx-auto">
+          {['Resultados', 'Próximos', 'Classificação'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveSubTab(tab)}
+              className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
+                activeSubTab === tab ? 'bg-red-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'
+              }`}
             >
-              {/* Gradiente */}
-              <div
-                className={`absolute left-0 top-0 bottom-0 w-[40%] bg-gradient-to-r ${getResultGradient(
-                  jogo
-                )} backdrop-blur-sm`}
-              />
-
-              <div className="relative z-10 flex items-center gap-4 min-w-[100px] sm:min-w-[140px] w-full sm:w-auto">
-                <Clock size={14} className="text-slate-500" />
-                <span className="text-[10px] font-bold text-slate-400 uppercase">
-                  {jogo.date}
-                </span>
-              </div>
-
-              {/* Ajuste do container de equipas para flex-row mas com wrap se necessário e tamanhos de fonte responsivos */}
-              <div className="relative z-10 flex-1 w-full flex items-center justify-between sm:justify-center gap-2 sm:gap-4">
-                <div className="flex items-center justify-end gap-2 sm:gap-3 flex-1 min-w-0">
-                  <span className="font-bold uppercase text-[10px] md:text-sm text-white text-right leading-tight block break-words">
-                    {jogo.homeTeam}
-                  </span>
-                  <img
-                    src={getLogo(jogo.homeTeam)}
-                    className="w-5 h-5 sm:w-6 sm:h-6 object-contain flex-shrink-0"
-                    alt=""
-                  />
-                </div>
-
-                <div className="flex items-center gap-1 sm:gap-2 bg-[#020617] px-3 sm:px-4 py-1 sm:py-1.5 rounded-lg border border-white/10 group-hover:border-red-600/50 flex-shrink-0">
-                  <span className="font-black text-base sm:text-lg text-white">
-                    {jogo.scoreHome}
-                  </span>
-                  <span className="text-red-600 font-bold">-</span>
-                  <span className="font-black text-base sm:text-lg text-white">
-                    {jogo.scoreAway}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-start gap-2 sm:gap-3 flex-1 min-w-0">
-                  <img
-                    src={getLogo(jogo.awayTeam)}
-                    className="w-5 h-5 sm:w-6 sm:h-6 object-contain flex-shrink-0"
-                    alt=""
-                  />
-                  <span className="font-bold uppercase text-[10px] md:text-sm text-white text-left leading-tight block break-words">
-                    {jogo.awayTeam}
-                  </span>
-                </div>
-              </div>
-
-              <div className="relative z-10 hidden lg:block min-w-[150px] text-right text-[9px] font-black text-slate-500 uppercase tracking-widest">
-                {jogo.competition}
-              </div>
-            </motion.div>
+              {tab}
+            </button>
           ))}
         </div>
+
+        <AnimatePresence mode="wait">
+          {activeSubTab === 'Resultados' && (
+            <motion.div key="resultados" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
+              {destaque && (
+                <motion.section className={`relative mb-12 rounded-3xl overflow-hidden border border-white/10 shadow-2xl ${getResultGradient(destaque, true)}`}>
+                   <div className="bg-blue-900/40 px-6 py-3 flex flex-wrap justify-center gap-4 text-[10px] font-bold uppercase tracking-widest border-b border-white/5">
+                    <span className="flex items-center gap-2 text-white">
+                      <Calendar size={12} className="text-red-600" /> {destaque.date}
+                    </span>
+                    <span className="flex items-center gap-2 text-white">
+                      <Trophy size={12} className="text-red-600" /> {destaque.competition}
+                    </span>
+                    <span className="flex items-center gap-2 text-white">
+                      <MapPin size={12} className="text-red-600" /> {destaque.stadium}
+                    </span>
+                  </div>
+                  <div className="p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div className="flex-1 flex flex-col items-center text-center">
+                      <div className="w-24 h-24 mb-4 flex items-center justify-center bg-white/5 rounded-full p-4 border border-white/10 shadow-inner">
+                        <img src={getLogo(destaque.homeTeam)} alt="Home" className="w-full h-full object-contain" />
+                      </div>
+                      <h3 className="text-xl md:text-2xl font-black uppercase italic text-white">{destaque.homeTeam}</h3>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <div className="flex items-center gap-6 bg-[#020617] px-8 py-4 rounded-2xl border border-red-600/30 shadow-[0_0_30px_rgba(220,38,38,0.2)]">
+                        <span className="text-6xl font-black italic text-white">{destaque.scoreHome}</span>
+                        <span className="text-3xl font-black text-red-600">-</span>
+                        <span className="text-6xl font-black italic text-white">{destaque.scoreAway}</span>
+                      </div>
+                    </div>
+                    <div className="flex-1 flex flex-col items-center text-center">
+                      <div className="w-24 h-24 mb-4 flex items-center justify-center bg-white/5 rounded-full p-4 border border-white/10 shadow-inner">
+                        <img src={getLogo(destaque.awayTeam)} alt="Away" className="w-full h-full object-contain" />
+                      </div>
+                      <h3 className="text-xl md:text-2xl font-black uppercase italic text-white">{destaque.awayTeam}</h3>
+                    </div>
+                  </div>
+                </motion.section>
+              )}
+              <div className="grid gap-3">
+                {ultimosConfrontos.map((jogo, i) => (
+                  <motion.div key={i} whileHover={{ x: 10, backgroundColor: 'rgba(255,255,255,0.08)' }} className="relative bg-white/5 border border-white/10 p-4 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4 group transition-all overflow-hidden">
+                    <div className={`absolute left-0 top-0 bottom-0 w-[40%] bg-gradient-to-r ${getResultGradient(jogo)} backdrop-blur-sm`} />
+                    <div className="relative z-10 flex items-center gap-4 min-w-[100px] sm:min-w-[140px] w-full sm:w-auto">
+                      <Clock size={14} className="text-slate-500" />
+                      <span className="text-[10px] font-bold text-slate-400 uppercase">{jogo.date}</span>
+                    </div>
+                    <div className="relative z-10 flex-1 w-full flex items-center justify-between sm:justify-center gap-2 sm:gap-4">
+                      <div className="flex items-center justify-end gap-2 sm:gap-3 flex-1 min-w-0">
+                        <span className="font-bold uppercase text-[10px] md:text-sm text-white text-right leading-tight block break-words">{jogo.homeTeam}</span>
+                        <img src={getLogo(jogo.homeTeam)} className="w-5 h-5 sm:w-6 sm:h-6 object-contain flex-shrink-0" alt="" />
+                      </div>
+                      <div className="flex items-center gap-1 sm:gap-2 bg-[#020617] px-3 sm:px-4 py-1 sm:py-1.5 rounded-lg border border-white/10 group-hover:border-red-600/50 flex-shrink-0">
+                        <span className="font-black text-base sm:text-lg text-white">{jogo.scoreHome}</span>
+                        <span className="text-red-600 font-bold">-</span>
+                        <span className="font-black text-base sm:text-lg text-white">{jogo.scoreAway}</span>
+                      </div>
+                      <div className="flex items-center justify-start gap-2 sm:gap-3 flex-1 min-w-0">
+                        <img src={getLogo(jogo.awayTeam)} className="w-5 h-5 sm:w-6 sm:h-6 object-contain flex-shrink-0" alt="" />
+                        <span className="font-bold uppercase text-[10px] md:text-sm text-white text-left leading-tight block break-words">{jogo.awayTeam}</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {activeSubTab === 'Próximos' && (
+            <motion.div key="proximos" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="grid gap-4">
+              {proximosJogos.map((jogo, i) => (
+                <div key={i} className="bg-white/5 border border-white/10 p-5 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6 hover:border-red-600/50 transition-all group">
+                  <div className="flex items-center gap-4">
+                    <div className="bg-red-600/10 p-3 rounded-xl border border-red-600/20 text-red-500 font-black text-xs uppercase text-center min-w-[60px]">
+                      {jogo.jornada}
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                        <Calendar size={12} /> {jogo.date} • <Clock size={12} /> {jogo.time}
+                      </div>
+                      <div className="text-[9px] font-black text-red-600 uppercase tracking-widest">{jogo.comp}</div>
+                    </div>
+                  </div>
+                  <div className="flex-1 flex items-center justify-center gap-3 sm:gap-8">
+                    <div className="flex items-center gap-3 flex-1 justify-end">
+                      <span className="font-black uppercase text-xs sm:text-sm text-white text-right">{jogo.home}</span>
+                      <img src={getLogo(jogo.home)} className="w-8 h-8 object-contain" alt="" />
+                    </div>
+                    <div className="px-4 py-1 rounded bg-white/5 border border-white/10 text-[10px] font-black text-red-500">VS</div>
+                    <div className="flex items-center gap-3 flex-1">
+                      <img src={getLogo(jogo.away)} className="w-8 h-8 object-contain" alt="" />
+                      <span className="font-black uppercase text-xs sm:text-sm text-white">{jogo.away}</span>
+                    </div>
+                  </div>
+                  <div className="bg-white/5 px-4 py-2 rounded-lg text-[9px] font-black text-slate-500 uppercase">{jogo.local === '(C)' ? 'Casa' : 'Fora'}</div>
+                </div>
+              ))}
+            </motion.div>
+          )}
+
+          {activeSubTab === 'Classificação' && (
+            <motion.div key="classificacao" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="overflow-x-auto rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-white/5 text-[10px] font-black uppercase tracking-widest text-slate-400 border-b border-white/10">
+                    <th className="px-6 py-5">#</th>
+                    <th className="px-6 py-5">Equipa</th>
+                    <th className="px-6 py-5 text-center">P</th>
+                    <th className="px-6 py-5 text-center">J</th>
+                    <th className="px-6 py-5 text-center">V</th>
+                    <th className="px-6 py-5 text-center">E</th>
+                    <th className="px-6 py-5 text-center">D</th>
+                    <th className="px-6 py-5 text-center">GM-GS</th>
+                    <th className="px-6 py-5 text-center">DG</th>
+                  </tr>
+                </thead>
+                <tbody className="text-sm">
+                  {classificacao.map((item) => (
+                    <tr key={item.pos} className={`border-b border-white/5 hover:bg-white/5 transition-colors ${item.equipa.includes("São Mamede") ? 'bg-red-600/10' : ''}`}>
+                      <td className="px-6 py-4 font-black text-xs text-slate-500">{item.pos}</td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-3">
+                          <img src={getLogo(item.equipa)} className="w-6 h-6 object-contain" alt="" />
+                          <span className={`font-black uppercase italic text-xs ${item.equipa.includes("São Mamede") ? 'text-red-500' : 'text-white'}`}>{item.equipa}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-center font-black text-white">{item.p}</td>
+                      <td className="px-6 py-4 text-center text-slate-400 font-bold">{item.j}</td>
+                      <td className="px-6 py-4 text-center text-emerald-500 font-bold">{item.v}</td>
+                      <td className="px-6 py-4 text-center text-slate-400 font-bold">{item.e}</td>
+                      <td className="px-6 py-4 text-center text-red-500 font-bold">{item.d}</td>
+                      <td className="px-6 py-4 text-center text-slate-400 text-xs">{item.gm}-{item.gs}</td>
+                      <td className={`px-6 py-4 text-center font-bold ${item.dg >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>{item.dg > 0 ? `+${item.dg}` : item.dg}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
