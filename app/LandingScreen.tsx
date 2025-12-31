@@ -151,7 +151,7 @@ export default function LandingScreen({ onEnter }: { onEnter: () => void }) {
         <div className="opacity-30 text-[8px] sm:text-[10px] text-white font-bold uppercase tracking-[0.6em]">
           Braga • Portugal
         </div>
-      </div>>
+      </div>
 
       <style jsx global>{`
         @keyframes shimmer {
