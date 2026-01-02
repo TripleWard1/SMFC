@@ -206,7 +206,7 @@ export default function PlantelScreen() {
             return (
               <section key={cat} className="relative">
                 <div className="flex items-center gap-6 mb-10">
-                  <h2 className="text-2xl font-black uppercase italic text-red-600 whitespace-nowrap">{cat}s</h2>
+                  <h2 className="text-2xl font-black uppercase italic text-red-600 whitespace-nowrap">{cat}</h2>
                   <div className="w-full h-[1px] bg-gradient-to-r from-red-600/50 to-transparent" />
                 </div>
 
