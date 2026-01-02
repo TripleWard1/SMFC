@@ -28,7 +28,7 @@ const allPlayers = [
   { id: 21, name: 'David Simões', pos: 'Avançado', no: '18', img: 'https://cdn-img.zerozero.pt/img/jogadores/new/85/02/678502_david_simoes_20250602140513.jpg', nat: 'PT' },
 ];
 
-// 2. DICIONÁRIO DE ESTATÍSTICAS (FORA DO COMPONENTE PARA EVITAR ERROS)
+// 2. DICIONÁRIO DE ESTATÍSTICAS
 const playerStatsDB: Record<string, any> = {
   'José Torres': { jogos: 8, titular: 8, golos: 13, labelGolos: 'Sofridos', mediaGolos: '1.63 GS/J', minutos: 720, v: 3, e: 2, d: 3, percV: 38, percE: 25, percD: 38, amarelos: 2, vermelhos: 0, semVencer: 3, forma: ['V', 'V', 'E', 'D', 'E'] },
   'Rui Nascimento': { jogos: 2, titular: 2, golos: 3, labelGolos: 'Sofridos', mediaGolos: '1.5 GS/J', minutos: 180, v: 2, e: 0, d: 0, percV: 100, percE: 0, percD: 0, amarelos: 0, vermelhos: 0, semVencer: 0, forma: ['V', 'V'] },
@@ -63,15 +63,6 @@ export default function PlantelScreen() {
     return playerStatsDB[player.name] || { jogos: 0, golos: 0, labelGolos: 'Golos', minutos: 0, forma: ['-'], v: 0, e: 0, d: 0, percV: 0, percE: 0, percD: 0, titular: 0, amarelos: 0, vermelhos: 0, semVencer: 0, mediaGolos: '0.0 G/J' };
   };
 
-  const getPlayerRanking = (playerName: string, statKey: string) => {
-    const sorted = [...allPlayers]
-      .map(p => ({ name: p.name, value: playerStatsDB[p.name]?.[statKey] || 0 }))
-      .sort((a, b) => b.value - a.value);
-    
-    const rank = sorted.findIndex(p => p.name === playerName) + 1;
-    return rank;
-  };
-
   const filteredPlayers = filter === 'Todos' ? allPlayers : allPlayers.filter((p) => p.pos === filter);
 
   return (
@@ -92,6 +83,107 @@ export default function PlantelScreen() {
           </div>
         </header>
 
+        {/* --- TABELA DE RANKINGS NO TOPO --- */}
+        <section className="mb-24">
+          <div className="flex items-center gap-4 mb-10">
+            <Trophy className="text-yellow-500" size={24} />
+            <h2 className="text-2xl font-black uppercase italic text-white tracking-tighter">Líderes da <span className="text-red-600">Temporada</span></h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* TOP GOLOS */}
+            <div className="bg-white/5 border border-white/10 rounded-[2rem] p-8 backdrop-blur-sm">
+              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-6 flex items-center gap-2">
+                <Activity size={14} className="text-red-500" /> Melhores Marcadores
+              </h3>
+              <div className="space-y-4">
+                {[...allPlayers]
+                  .filter(p => playerStatsDB[p.name]?.labelGolos !== 'Sofridos')
+                  .map(p => ({ ...p, val: playerStatsDB[p.name]?.golos || 0 }))
+                  .sort((a, b) => b.val - a.val)
+                  .slice(0, 3)
+                  .map((p, idx) => (
+                    <div key={p.id} className="flex items-center justify-between group">
+                      <div className="flex items-center gap-4">
+                        <span className={`text-lg font-black italic ${idx === 0 ? 'text-yellow-500' : 'text-slate-600'}`}>#{idx + 1}</span>
+                        <span className="text-sm font-bold text-white group-hover:text-red-500 transition-colors uppercase">{p.name}</span>
+                      </div>
+                      <span className="text-lg font-black text-white">{p.val}</span>
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            {/* MURALHA (TOP GS - INVERSO) */}
+            <div className="bg-white/5 border border-white/10 rounded-[2rem] p-8 backdrop-blur-sm border-orange-500/20">
+              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-6 flex items-center gap-2">
+                <ShieldCheck size={14} className="text-orange-500" /> Muralha (GS)
+              </h3>
+              <div className="space-y-4">
+                {[...allPlayers]
+                  .filter(p => playerStatsDB[p.name]?.labelGolos === 'Sofridos')
+                  .map(p => ({ ...p, val: playerStatsDB[p.name]?.golos || 0 }))
+                  .sort((a, b) => a.val - b.val)
+                  .slice(0, 3)
+                  .map((p, idx) => (
+                    <div key={p.id} className="flex items-center justify-between group">
+                      <div className="flex items-center gap-4">
+                        <span className={`text-lg font-black italic ${idx === 0 ? 'text-orange-500' : 'text-slate-600'}`}>#{idx + 1}</span>
+                        <span className="text-sm font-bold text-white group-hover:text-orange-500 transition-colors uppercase">{p.name}</span>
+                      </div>
+                      <span className="text-lg font-black text-white">{p.val}</span>
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            {/* TOP MINUTOS */}
+            <div className="bg-white/5 border border-white/10 rounded-[2rem] p-8 backdrop-blur-sm">
+              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-6 flex items-center gap-2">
+                <Timer size={14} className="text-blue-500" /> Total de Minutos
+              </h3>
+              <div className="space-y-4">
+                {[...allPlayers]
+                  .map(p => ({ ...p, val: playerStatsDB[p.name]?.minutos || 0 }))
+                  .sort((a, b) => b.val - a.val)
+                  .slice(0, 3)
+                  .map((p, idx) => (
+                    <div key={p.id} className="flex items-center justify-between group">
+                      <div className="flex items-center gap-4">
+                        <span className={`text-lg font-black italic ${idx === 0 ? 'text-blue-500' : 'text-slate-600'}`}>#{idx + 1}</span>
+                        <span className="text-sm font-bold text-white group-hover:text-red-500 transition-colors uppercase">{p.name}</span>
+                      </div>
+                      <span className="text-lg font-black text-white">{p.val}'</span>
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            {/* TOP JOGOS */}
+            <div className="bg-white/5 border border-white/10 rounded-[2rem] p-8 backdrop-blur-sm">
+              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-6 flex items-center gap-2">
+                <UserCircle size={14} className="text-green-500" /> Presenças em Campo
+              </h3>
+              <div className="space-y-4">
+                {[...allPlayers]
+                  .map(p => ({ ...p, val: playerStatsDB[p.name]?.jogos || 0 }))
+                  .sort((a, b) => b.val - a.val)
+                  .slice(0, 3)
+                  .map((p, idx) => (
+                    <div key={p.id} className="flex items-center justify-between group">
+                      <div className="flex items-center gap-4">
+                        <span className={`text-lg font-black italic ${idx === 0 ? 'text-green-500' : 'text-slate-600'}`}>#{idx + 1}</span>
+                        <span className="text-sm font-bold text-white group-hover:text-red-500 transition-colors uppercase">{p.name}</span>
+                      </div>
+                      <span className="text-lg font-black text-white">{p.val} J</span>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* --- FILTROS DE CATEGORIA ANTES DAS FOTOS --- */}
         <div className="flex flex-wrap gap-2 mb-20 bg-white/5 p-1.5 rounded-2xl border border-white/10 backdrop-blur-xl w-fit">
           {categories.map((cat) => (
             <button
@@ -105,82 +197,6 @@ export default function PlantelScreen() {
             </button>
           ))}
         </div>
-        {/* --- TABELA DE RANKINGS / LÍDERES DA TEMPORADA --- */}
-<section className="mb-24">
-  <div className="flex items-center gap-4 mb-10">
-    <Trophy className="text-yellow-500" size={24} />
-    <h2 className="text-2xl font-black uppercase italic text-white tracking-tighter">Líderes da <span className="text-red-600">Temporada</span></h2>
-  </div>
-
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-    {/* TOP GOLOS - CORRIGIDO PARA IGNORAR GOLOS SOFRIDOS */}
-<div className="bg-white/5 border border-white/10 rounded-[2rem] p-8 backdrop-blur-sm">
-  <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-6 flex items-center gap-2">
-    <Activity size={14} className="text-red-500" /> Melhores Marcadores
-  </h3>
-  <div className="space-y-4">
-    {[...allPlayers]
-      .filter(p => playerStatsDB[p.name]?.labelGolos !== 'Sofridos') // Filtra para não mostrar GR
-      .map(p => ({ ...p, val: playerStatsDB[p.name]?.golos || 0 }))
-      .sort((a, b) => b.val - a.val)
-      .slice(0, 3)
-      .map((p, idx) => (
-        <div key={p.id} className="flex items-center justify-between group">
-          <div className="flex items-center gap-4">
-            <span className={`text-lg font-black italic ${idx === 0 ? 'text-yellow-500' : 'text-slate-600'}`}>#{idx + 1}</span>
-            <span className="text-sm font-bold text-white group-hover:text-red-500 transition-colors uppercase">{p.name}</span>
-          </div>
-          <span className="text-lg font-black text-white">{p.val}</span>
-        </div>
-      ))}
-  </div>
-</div>
-
-    {/* TOP MINUTOS */}
-    <div className="bg-white/5 border border-white/10 rounded-[2rem] p-8 backdrop-blur-sm">
-      <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-6 flex items-center gap-2">
-        <Timer size={14} className="text-blue-500" /> Total de Minutos
-      </h3>
-      <div className="space-y-4">
-        {[...allPlayers]
-          .map(p => ({ ...p, val: playerStatsDB[p.name]?.minutos || 0 }))
-          .sort((a, b) => b.val - a.val)
-          .slice(0, 3)
-          .map((p, idx) => (
-            <div key={p.id} className="flex items-center justify-between group">
-              <div className="flex items-center gap-4">
-                <span className={`text-lg font-black italic ${idx === 0 ? 'text-blue-500' : 'text-slate-600'}`}>#{idx + 1}</span>
-                <span className="text-sm font-bold text-white group-hover:text-red-500 transition-colors uppercase">{p.name}</span>
-              </div>
-              <span className="text-lg font-black text-white">{p.val}'</span>
-            </div>
-          ))}
-      </div>
-    </div>
-
-    {/* TOP JOGOS / PRESENÇAS */}
-    <div className="bg-white/5 border border-white/10 rounded-[2rem] p-8 backdrop-blur-sm">
-      <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-6 flex items-center gap-2">
-        <ShieldCheck size={14} className="text-green-500" /> Presenças em Campo
-      </h3>
-      <div className="space-y-4">
-        {[...allPlayers]
-          .map(p => ({ ...p, val: playerStatsDB[p.name]?.jogos || 0 }))
-          .sort((a, b) => b.val - a.val)
-          .slice(0, 3)
-          .map((p, idx) => (
-            <div key={p.id} className="flex items-center justify-between group">
-              <div className="flex items-center gap-4">
-                <span className={`text-lg font-black italic ${idx === 0 ? 'text-green-500' : 'text-slate-600'}`}>#{idx + 1}</span>
-                <span className="text-sm font-bold text-white group-hover:text-red-500 transition-colors uppercase">{p.name}</span>
-              </div>
-              <span className="text-lg font-black text-white">{p.val} J</span>
-            </div>
-          ))}
-      </div>
-    </div>
-  </div>
-</section>
 
         <div className="space-y-24">
           {categories.filter((c) => c !== 'Todos').map((cat) => {
@@ -299,19 +315,16 @@ export default function PlantelScreen() {
                         {getPlayerStats(selectedPlayer).vermelhos > 0 && <div className="flex items-center gap-1"><div className="w-2 h-3 bg-red-600 rounded-sm" /><span className="text-xs font-black text-white">{getPlayerStats(selectedPlayer).vermelhos}</span></div>}
                       </div>
                     </div>
-                    {/* ESTE É O BLOCO NOVO PARA SUBSTITUIR O "SEM VENCER HÁ" */}
-                    
-<div className="bg-blue-600/10 p-5 rounded-2xl border border-blue-600/20 flex flex-col justify-center text-center">
-  <span className="text-[8px] font-black text-blue-500 uppercase tracking-tighter">
-    Eficiência por Jogo
-  </span>
-  <span className="text-sm font-black text-white italic uppercase">
-    {/* Se o jogador tiver minutos, calculamos a média de participação */}
-    {getPlayerStats(selectedPlayer).minutos > 0 
-      ? `${Math.round(getPlayerStats(selectedPlayer).minutos / (getPlayerStats(selectedPlayer).jogos || 1))} MIN / JOGO`
-      : '---'}
-  </span>
-</div>
+                    <div className="bg-blue-600/10 p-5 rounded-2xl border border-blue-600/20 flex flex-col justify-center text-center">
+                      <span className="text-[8px] font-black text-blue-500 uppercase tracking-tighter">
+                        Eficiência por Jogo
+                      </span>
+                      <span className="text-sm font-black text-white italic uppercase">
+                        {getPlayerStats(selectedPlayer).minutos > 0 
+                          ? `${Math.round(getPlayerStats(selectedPlayer).minutos / (getPlayerStats(selectedPlayer).jogos || 1))} MIN / JOGO`
+                          : '---'}
+                      </span>
+                    </div>
                   </div>
                   <div className="bg-white/[0.02] p-8 rounded-[2.5rem] border border-white/5 text-center">
                     <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-6">Forma Recente</h4>
