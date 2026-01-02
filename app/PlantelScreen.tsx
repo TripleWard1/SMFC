@@ -137,112 +137,115 @@ export default function PlantelScreen() {
         </div>
 
         {/* --- PAINEL LATERAL PREMIUM CORRIGIDO (FECHO E SCROLL) --- */}
-        <AnimatePresence>
-          {selectedPlayer && (
-            <div className="fixed inset-0 z-[999] flex justify-end">
-              {/* Camada de fundo: Clicar aqui fecha o painel obrigatoriamente */}
-              <motion.div 
-                initial={{ opacity: 0 }} 
-                animate={{ opacity: 1 }} 
-                exit={{ opacity: 0 }}
-                onClick={() => setSelectedPlayer(null)}
-                className="absolute inset-0 bg-black/90 backdrop-blur-md cursor-pointer"
-              />
-              
-              <motion.div 
-                initial={{ x: '100%' }} 
-                animate={{ x: 0 }} 
-                exit={{ x: '100%' }}
-                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="relative w-full md:w-[450px] h-full bg-[#020617] border-l border-white/10 flex flex-col shadow-2xl overflow-hidden"
-              >
-                {/* Cabeçalho Fixo com botão de fechar */}
-                <div className="p-6 border-b border-white/5 bg-[#020617] flex justify-between items-center">
-                  <button 
-                    onClick={() => setSelectedPlayer(null)} 
-                    className="text-slate-500 uppercase text-[11px] font-black tracking-[0.3em] flex items-center gap-2 hover:text-white transition-colors"
-                  >
-                    <ArrowLeft size={18} className="text-red-600" /> Voltar
-                  </button>
-                  
-                  {/* Botão extra de fechar no canto (X) para mobile */}
-                  <button 
-                    onClick={() => setSelectedPlayer(null)}
-                    className="md:hidden p-2 text-slate-400 hover:text-white"
-                  >
-                    <ShieldCheck size={20} className="rotate-45" /> {/* Usando ícone que já tens para não dar erro */}
-                  </button>
-                </div>
+<AnimatePresence>
+  {selectedPlayer && (
+    <div className="fixed inset-0 z-[999] flex justify-end">
+      {/* Camada de fundo: Clicar aqui fecha o painel obrigatoriamente */}
+      <motion.div 
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }} 
+        exit={{ opacity: 0 }}
+        onClick={() => setSelectedPlayer(null)}
+        className="absolute inset-0 bg-black/90 backdrop-blur-md cursor-pointer"
+      />
+      
+      <motion.div 
+        initial={{ x: '100%' }} 
+        animate={{ x: 0 }} 
+        exit={{ x: '100%' }}
+        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+        className="relative w-full md:w-[450px] h-full bg-[#020617] border-l border-white/10 flex flex-col shadow-2xl overflow-hidden"
+      >
+        {/* BOTÃO DE FECHAR MOBILE (Visível apenas em Mobile) */}
+        <div className="md:hidden absolute top-4 right-4 z-[130]">
+          <button 
+            onClick={() => setSelectedPlayer(null)}
+            className="p-3 bg-red-600 rounded-full text-white shadow-lg active:scale-90 transition-transform"
+          >
+            {/* Usando ShieldCheck rotacionado como X para manter compatibilidade com teus imports */}
+            <ShieldCheck size={24} className="rotate-45" /> 
+          </button>
+        </div>
 
-                {/* Área de Conteúdo com Scroll */}
-                <div className="flex-1 overflow-y-auto p-8 pt-4 pb-32">
-                  
-                  {/* Foto e Info Principal */}
-                  <div className="relative mb-12 text-center">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-red-600/10 blur-[100px] rounded-full" />
-                    <img src={selectedPlayer.img} className="w-56 h-56 mx-auto rounded-3xl object-cover border border-white/10 shadow-2xl relative z-10" alt={selectedPlayer.name} />
-                    <div className="mt-8 relative z-10">
-                      <span className="text-red-600 font-black italic text-6xl opacity-10 absolute -top-6 left-0 w-full text-center">#{selectedPlayer.no}</span>
-                      <h2 className="text-4xl font-black italic text-white uppercase tracking-tighter leading-tight mb-2">{selectedPlayer.name}</h2>
-                      <p className="text-slate-500 font-bold uppercase tracking-[0.4em] text-[10px]">{selectedPlayer.pos} • S. MAMEDE D'ESTE</p>
-                    </div>
-                  </div>
+        {/* Cabeçalho Fixo */}
+        <div className="p-6 border-b border-white/5 bg-[#020617] flex justify-between items-center">
+          <button 
+            onClick={() => setSelectedPlayer(null)} 
+            className="text-slate-500 uppercase text-[11px] font-black tracking-[0.3em] flex items-center gap-2 hover:text-white transition-colors"
+          >
+            <ArrowLeft size={18} className="text-red-600" /> Voltar
+          </button>
+        </div>
 
-                  {/* Estatísticas (Xandão Style) */}
-                  <div className="grid grid-cols-2 gap-4 mb-8">
-                    <div className="bg-white/5 p-6 rounded-[2rem] border border-white/10 text-center">
-                      <Trophy className="mx-auto mb-2 text-yellow-500/50" size={20} />
-                      <span className="block text-4xl font-black text-white">{getPlayerStats(selectedPlayer).jogos}</span>
-                      <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Jogos</span>
-                    </div>
-                    <div className="bg-white/5 p-6 rounded-[2rem] border border-white/10 text-center">
-                      <Activity className="mx-auto mb-2 text-red-500/50" size={20} />
-                      <span className="block text-4xl font-black text-red-500">{getPlayerStats(selectedPlayer).golos}</span>
-                      <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Golos</span>
-                    </div>
-                  </div>
-
-                  {/* Barra de Minutos baseada na imagem que enviaste */}
-                  <div className="bg-white/[0.02] p-8 rounded-[2.5rem] border border-white/5 mb-8">
-                    <div className="flex justify-between items-end mb-6">
-                      <div>
-                        <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-1">Minutos Jogados</h4>
-                        <div className="flex items-baseline gap-2">
-                          <span className="text-5xl font-black text-white italic">{getPlayerStats(selectedPlayer).minutos}</span>
-                          <span className="text-slate-600 font-black text-sm uppercase">Min</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                      <motion.div 
-                        initial={{ width: 0 }} 
-                        animate={{ width: `${Math.min((getPlayerStats(selectedPlayer).minutos / 1000) * 100, 100)}%` }} 
-                        className="h-full bg-gradient-to-r from-red-600 to-red-400" 
-                      />
-                    </div>
-                  </div>
-
-                  {/* Forma Recente (VVED) */}
-                  <div className="bg-white/[0.02] p-8 rounded-[2.5rem] border border-white/5">
-                    <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-6">Forma Recente</h4>
-                    <div className="flex gap-3 justify-center">
-                      {getPlayerStats(selectedPlayer).forma.map((res: string, i: number) => (
-                        <div key={i} className={`w-10 h-10 rounded-xl flex items-center justify-center text-xs font-black ${
-                          res === 'V' ? 'bg-green-500/20 text-green-500 border border-green-500/20' : 
-                          res === 'E' ? 'bg-slate-500/20 text-slate-500 border border-slate-500/20' : 
-                          res === 'D' ? 'bg-red-500/20 text-red-500 border border-red-500/20' : 'bg-white/5 text-slate-700'
-                        }`}>
-                          {res}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                </div>
-              </motion.div>
+        {/* Área de Conteúdo com Scroll */}
+        <div className="flex-1 overflow-y-auto p-8 pt-4 pb-32">
+          
+          {/* Foto e Info Principal */}
+          <div className="relative mb-12 text-center">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-red-600/10 blur-[100px] rounded-full" />
+            <img src={selectedPlayer.img} className="w-56 h-56 mx-auto rounded-3xl object-cover border border-white/10 shadow-2xl relative z-10" alt={selectedPlayer.name} />
+            <div className="mt-8 relative z-10">
+              <span className="text-red-600 font-black italic text-6xl opacity-10 absolute -top-6 left-0 w-full text-center">#{selectedPlayer.no}</span>
+              <h2 className="text-4xl font-black italic text-white uppercase tracking-tighter leading-tight mb-2">{selectedPlayer.name}</h2>
+              <p className="text-slate-500 font-bold uppercase tracking-[0.4em] text-[10px]">{selectedPlayer.pos} • S. MAMEDE D'ESTE</p>
             </div>
-          )}
-        </AnimatePresence>
+          </div>
+
+          {/* Estatísticas (Xandão Style) */}
+          <div className="grid grid-cols-2 gap-4 mb-8">
+            <div className="bg-white/5 p-6 rounded-[2rem] border border-white/10 text-center">
+              <Trophy className="mx-auto mb-2 text-yellow-500/50" size={20} />
+              <span className="block text-4xl font-black text-white">{getPlayerStats(selectedPlayer).jogos}</span>
+              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Jogos</span>
+            </div>
+            <div className="bg-white/5 p-6 rounded-[2rem] border border-white/10 text-center">
+              <Activity className="mx-auto mb-2 text-red-500/50" size={20} />
+              <span className="block text-4xl font-black text-red-500">{getPlayerStats(selectedPlayer).golos}</span>
+              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Golos</span>
+            </div>
+          </div>
+
+          {/* Barra de Minutos */}
+          <div className="bg-white/[0.02] p-8 rounded-[2.5rem] border border-white/5 mb-8">
+            <div className="flex justify-between items-end mb-6">
+              <div>
+                <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-1">Minutos Jogados</h4>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-5xl font-black text-white italic">{getPlayerStats(selectedPlayer).minutos}</span>
+                  <span className="text-slate-600 font-black text-sm uppercase">Min</span>
+                </div>
+              </div>
+            </div>
+            <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+              <motion.div 
+                initial={{ width: 0 }} 
+                animate={{ width: `${Math.min((getPlayerStats(selectedPlayer).minutos / 1000) * 100, 100)}%` }} 
+                className="h-full bg-gradient-to-r from-red-600 to-red-400" 
+              />
+            </div>
+          </div>
+
+          {/* Forma Recente (VVED) */}
+          <div className="bg-white/[0.02] p-8 rounded-[2.5rem] border border-white/5">
+            <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-6">Forma Recente</h4>
+            <div className="flex gap-3 justify-center">
+              {getPlayerStats(selectedPlayer).forma.map((res: string, i: number) => (
+                <div key={i} className={`w-10 h-10 rounded-xl flex items-center justify-center text-xs font-black ${
+                  res === 'V' ? 'bg-green-500/20 text-green-500 border border-green-500/20' : 
+                  res === 'E' ? 'bg-slate-500/20 text-slate-500 border border-slate-500/20' : 
+                  res === 'D' ? 'bg-red-500/20 text-red-500 border border-red-500/20' : 'bg-white/5 text-slate-700'
+                }`}>
+                  {res}
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      </motion.div>
+    </div>
+  )}
+</AnimatePresence>
 
       </div>
     </div>
