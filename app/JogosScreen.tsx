@@ -187,21 +187,24 @@ export default function JogosScreen() {
   return (
     <div className="min-h-screen bg-[#020617] pt-28 pb-20 px-4">
       <div className="max-w-5xl mx-auto">
-        <div className="flex justify-center gap-2 mb-10 bg-white/5 p-1 rounded-full border border-white/10 w-fit mx-auto">
-        {['Resultados', 'Próximos', 'Classificação'].map((tab) => (
-  <button
-    key={tab}
-    onClick={() => setActiveSubTab(tab === 'Próximos' ? 'Proximos' : tab)}
-    className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
-      (activeSubTab === tab || (activeSubTab === 'Proximos' && tab === 'Próximos')) 
-      ? 'bg-red-600 text-white shadow-lg' 
-      : 'text-slate-400 hover:text-white'
-    }`}
-  >
-    {tab}
-  </button>
-))}
-        </div>
+       {/* Barra de Navegação Sub-Abas - Ajuste Definitivo para Mobile */}
+<div className="flex justify-center mb-10 relative z-10 w-full px-2">
+  <div className="flex bg-white/5 p-1 rounded-full border border-white/10 w-full max-w-md mx-auto items-center justify-between">
+    {['Resultados', 'Próximos', 'Classificação'].map((tab) => (
+      <button
+        key={tab}
+        onClick={() => setActiveSubTab(tab === 'Próximos' ? 'Proximos' : tab)}
+        className={`flex-1 px-1 py-2.5 rounded-full text-[9px] xs:text-[10px] md:text-xs font-black uppercase tracking-tight md:tracking-widest transition-all whitespace-nowrap text-center ${
+          (activeSubTab === tab || (activeSubTab === 'Proximos' && tab === 'Próximos')) 
+          ? 'bg-red-600 text-white shadow-lg' 
+          : 'text-slate-400 hover:text-white'
+        }`}
+      >
+        {tab}
+      </button>
+    ))}
+  </div>
+</div>
 
         <AnimatePresence mode="wait">
           {activeSubTab === 'Resultados' && (
