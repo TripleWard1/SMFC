@@ -331,78 +331,83 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
     </motion.div>
   </div>
 
-  {/* --- ÁREA DE CLASSIFICAÇÃO (LISTA VERTICAL PARA MÁXIMA LEGIBILIDADE) --- */}
+ {/* --- ÁREA DE CLASSIFICAÇÃO (DESIGN MOBILE-FIRST) --- */}
 <motion.div 
   initial={{ opacity: 0, y: 30 }} 
   whileInView={{ opacity: 1, y: 0 }}
-  className="max-w-4xl mx-auto relative px-4 mt-20"
+  className="max-w-4xl mx-auto relative px-2 mt-16"
 >
-  <div className="relative bg-[#0a0f1e]/90 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-6 md:p-10 shadow-2xl">
+  <div className="relative bg-[#0a0f1e]/80 backdrop-blur-3xl border border-white/5 rounded-[2.5rem] p-5 md:p-10 shadow-2xl">
     
-    {/* Cabeçalho Ajustado */}
-<div className="flex items-center justify-between mb-6 border-l-4 border-red-600 pl-4">
-  <div className="flex flex-col min-w-0">
-    <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500">Performance</span>
-    <h2 className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter truncate">Classificação</h2>
-  </div>
-  <div className="shrink-0 text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-white/5 px-2 py-1 rounded-lg ml-2">
-    Série B
-  </div>
-</div>
-
-{/* Lista de Classificação - Legibilidade Máxima */}
-<div className="flex flex-col gap-4 w-full">
-  {JORNADA_DATA.classificacao.map((item, index) => (
-    <div 
-      key={index} 
-      className={`relative flex flex-col md:flex-row md:items-center justify-between w-full p-4 md:p-6 rounded-[2rem] transition-all ${
-        item.destaque 
-          ? "bg-gradient-to-br from-red-600 to-red-900 shadow-xl" 
-          : "bg-[#0f172a]/40 border border-white/5"
-      }`}
-    >
-      <div className="flex items-center gap-4 flex-1 min-w-0">
-        {/* Posição */}
-        <span className={`text-xl md:text-2xl font-black italic w-8 shrink-0 ${
-          item.destaque ? "text-white/40" : "text-slate-700"
-        }`}>
-          {item.pos}
-        </span>
-        
-        {/* Logo */}
-        <div className="relative shrink-0">
-          <img 
-            src={getLogo(item.logo)} 
-            className="w-10 h-10 md:w-12 md:h-12 object-contain" 
-            alt="Logo"
-          />
-        </div>
-
-        {/* Nome da Equipa - Agora com liberdade de espaço */}
-        <div className="flex flex-col min-w-0">
-          <span className={`text-[13px] md:text-base font-black uppercase tracking-tight md:tracking-wider leading-tight ${
-            item.destaque ? "text-white" : "text-slate-200"
-          }`}>
-            {item.nome}
-          </span>
-          <span className="md:hidden text-[9px] font-bold text-white/30 uppercase tracking-widest">Campeonato Série B</span>
-        </div>
-      </div>
-
-      {/* Pontos - Posicionados de forma fixa para não apertar o nome */}
-      <div className={`flex items-center gap-2 mt-3 md:mt-0 self-end md:self-auto px-4 py-1.5 rounded-full ${
-        item.destaque ? "bg-black/20" : "bg-white/5"
-      }`}>
-        <span className="text-xl font-black text-white">{item.pts}</span>
-        <span className={`text-[10px] font-bold uppercase ${
-          item.destaque ? "text-white/70" : "text-slate-500"
-        }`}>
-          Pts
+    {/* Cabeçalho com Badge flutuante para não cortar o título */}
+    <div className="flex flex-col mb-8 pl-2">
+      <div className="flex items-center justify-between w-full">
+        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-red-500">Performance</span>
+        <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest bg-white/5 px-3 py-1 rounded-full border border-white/5">
+          Série B
         </span>
       </div>
+      <h2 className="text-3xl font-black text-white uppercase tracking-tighter mt-1">Classificação</h2>
     </div>
-  ))}
-</div>
+
+    {/* Lista de Classificação - Cards Verticais em Mobile */}
+    <div className="grid grid-cols-1 gap-4">
+      {JORNADA_DATA.classificacao.map((item, index) => (
+        <div 
+          key={index} 
+          className={`relative overflow-hidden flex items-center justify-between p-4 rounded-[1.8rem] transition-all ${
+            item.destaque 
+              ? "bg-gradient-to-br from-red-600 to-red-900 shadow-xl ring-1 ring-white/20" 
+              : "bg-white/[0.03] border border-white/5"
+          }`}
+        >
+          {/* Background Decorativo para o Destaque */}
+          {item.destaque && (
+            <div className="absolute right-0 top-0 w-24 h-24 bg-white/5 rounded-full -mr-10 -mt-10 blur-2xl" />
+          )}
+
+          <div className="flex items-center gap-4 flex-1 min-w-0 z-10">
+            {/* Posição com estilo Glass */}
+            <div className={`flex items-center justify-center w-10 h-10 rounded-2xl text-lg font-black italic shrink-0 ${
+              item.destaque ? "bg-black/20 text-white" : "bg-white/5 text-slate-500"
+            }`}>
+              {item.pos}
+            </div>
+            
+            {/* Logo e Nome */}
+            <div className="flex items-center gap-3 min-w-0">
+              <img 
+                src={getLogo(item.logo)} 
+                className="w-10 h-10 object-contain drop-shadow-lg" 
+                alt="Logo"
+              />
+              <div className="flex flex-col min-w-0">
+                <span className={`text-[13px] md:text-base font-black uppercase tracking-tight leading-none truncate ${
+                  item.destaque ? "text-white" : "text-slate-200"
+                }`}>
+                  {item.nome}
+                </span>
+                <span className={`text-[8px] font-bold uppercase tracking-widest mt-1 ${
+                  item.destaque ? "text-red-200/50" : "text-slate-600"
+                }`}>
+                  Campeonato Distrital
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Pontuação Estilo Badge */}
+          <div className={`flex flex-col items-center justify-center min-w-[50px] py-2 rounded-2xl z-10 ${
+            item.destaque ? "bg-white/10" : "bg-black/20"
+          }`}>
+            <span className="text-xl font-black text-white leading-none">{item.pts}</span>
+            <span className={`text-[8px] font-bold uppercase ${
+              item.destaque ? "text-white/60" : "text-slate-600"
+            }`}>Pts</span>
+          </div>
+        </div>
+      ))}
+    </div>
 
     {/* Footer da Tabela */}
     <div className="mt-8 pt-6 border-t border-white/5 flex justify-center">
