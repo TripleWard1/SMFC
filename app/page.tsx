@@ -350,46 +350,51 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
   </div>
 </div>
 
-{/* Lista de Classificação - Uniforme e Larga */}
-<div className="flex flex-col gap-3 w-full">
+{/* Lista de Classificação - Legibilidade Máxima */}
+<div className="flex flex-col gap-4 w-full">
   {JORNADA_DATA.classificacao.map((item, index) => (
     <div 
       key={index} 
-      className={`flex items-center justify-between w-full p-4 md:p-6 rounded-2xl transition-all ${
+      className={`relative flex flex-col md:flex-row md:items-center justify-between w-full p-4 md:p-6 rounded-[2rem] transition-all ${
         item.destaque 
-          ? "bg-gradient-to-r from-red-600 to-red-800 shadow-xl ring-1 ring-white/30" 
-          : "bg-white/[0.03] border border-white/10"
+          ? "bg-gradient-to-br from-red-600 to-red-900 shadow-xl" 
+          : "bg-[#0f172a]/40 border border-white/5"
       }`}
     >
-      {/* Lado Esquerdo: Pos + Logo + Nome */}
-      <div className="flex items-center gap-4 md:gap-6 flex-1 min-w-0">
-        <span className={`text-lg md:text-2xl font-black italic w-6 md:w-10 shrink-0 ${
+      <div className="flex items-center gap-4 flex-1 min-w-0">
+        {/* Posição */}
+        <span className={`text-xl md:text-2xl font-black italic w-8 shrink-0 ${
           item.destaque ? "text-white/40" : "text-slate-700"
         }`}>
           {item.pos}
         </span>
         
-        <img 
-          src={getLogo(item.logo)} 
-          className={`w-9 h-9 md:w-12 md:h-12 object-contain shrink-0 ${
-            item.destaque ? "brightness-110" : "opacity-70"
-          }`} 
-          alt="Logo"
-        />
-        
-        <span className={`text-[12px] md:text-base font-black uppercase tracking-wider truncate ${
-          item.destaque ? "text-white" : "text-slate-200"
-        }`}>
-          {item.nome}
-        </span>
+        {/* Logo */}
+        <div className="relative shrink-0">
+          <img 
+            src={getLogo(item.logo)} 
+            className="w-10 h-10 md:w-12 md:h-12 object-contain" 
+            alt="Logo"
+          />
+        </div>
+
+        {/* Nome da Equipa - Agora com liberdade de espaço */}
+        <div className="flex flex-col min-w-0">
+          <span className={`text-[13px] md:text-base font-black uppercase tracking-tight md:tracking-wider leading-tight ${
+            item.destaque ? "text-white" : "text-slate-200"
+          }`}>
+            {item.nome}
+          </span>
+          <span className="md:hidden text-[9px] font-bold text-white/30 uppercase tracking-widest">Campeonato Série B</span>
+        </div>
       </div>
 
-      {/* Lado Direito: Pontos */}
-      <div className={`flex items-center gap-2 ml-4 shrink-0 px-4 py-2 rounded-xl ${
+      {/* Pontos - Posicionados de forma fixa para não apertar o nome */}
+      <div className={`flex items-center gap-2 mt-3 md:mt-0 self-end md:self-auto px-4 py-1.5 rounded-full ${
         item.destaque ? "bg-black/20" : "bg-white/5"
       }`}>
-        <span className="text-xl md:text-2xl font-black text-white">{item.pts}</span>
-        <span className={`text-[10px] md:text-[12px] font-bold uppercase ${
+        <span className="text-xl font-black text-white">{item.pts}</span>
+        <span className={`text-[10px] font-bold uppercase ${
           item.destaque ? "text-white/70" : "text-slate-500"
         }`}>
           Pts
