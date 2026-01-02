@@ -350,40 +350,38 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
       <h2 className="text-3xl font-black text-white uppercase tracking-tighter mt-1">Classificação</h2>
     </div>
 
-    {/* Lista de Classificação - Nomes Completos e Design Comprido */}
+    {/* Lista de Classificação - Correção de Sobreposição */}
 <div className="grid grid-cols-1 gap-4 w-full">
   {JORNADA_DATA.classificacao.map((item, index) => (
     <div 
       key={index} 
-      className={`relative flex items-center justify-between p-5 md:p-6 rounded-[2.5rem] transition-all w-full ${
+      className={`relative flex items-center justify-between p-4 md:p-6 rounded-[2rem] transition-all w-full overflow-hidden ${
         item.destaque 
           ? "bg-gradient-to-r from-red-600 to-red-900 shadow-2xl ring-1 ring-white/20" 
           : "bg-white/[0.03] border border-white/5"
       }`}
     >
-      <div className="flex items-center gap-4 flex-grow min-w-0">
-        {/* Posição */}
-        <div className={`flex items-center justify-center w-10 h-10 rounded-2xl text-lg font-black italic shrink-0 ${
+      {/* Lado Esquerdo: Pos + Logo + Nome */}
+      <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
+        <div className={`flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-xl text-base md:text-lg font-black italic shrink-0 ${
           item.destaque ? "bg-black/20 text-white" : "bg-white/5 text-slate-500"
         }`}>
           {item.pos}
         </div>
         
-        {/* Logo */}
         <img 
           src={getLogo(item.logo)} 
-          className="w-10 h-10 md:w-12 md:h-12 object-contain shrink-0 drop-shadow-md" 
+          className="w-9 h-9 md:w-11 md:h-11 object-contain shrink-0 drop-shadow-md" 
           alt="Logo"
         />
 
-        {/* Nome da Equipa - Sem restrição para não cortar */}
-        <div className="flex flex-col min-w-0 pr-2">
-          <span className={`text-[14px] md:text-base font-black uppercase tracking-tight leading-tight ${
+        <div className="flex flex-col min-w-0 overflow-hidden pr-2">
+          <span className={`text-[13px] md:text-base font-black uppercase tracking-tight leading-tight truncate ${
             item.destaque ? "text-white" : "text-slate-200"
           }`}>
             {item.nome}
           </span>
-          <span className={`text-[8px] font-bold uppercase tracking-[0.15em] mt-1 ${
+          <span className={`text-[7px] md:text-[8px] font-bold uppercase tracking-widest mt-0.5 ${
             item.destaque ? "text-red-200/50" : "text-slate-600"
           }`}>
             Campeonato Distrital
@@ -391,12 +389,12 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
         </div>
       </div>
 
-      {/* Pontuação - Badge fixo à direita */}
-      <div className={`flex items-center justify-center gap-1.5 px-4 py-2 rounded-2xl shrink-0 ${
+      {/* Lado Direito: Pontuação (Garante que nunca se sobrepõe) */}
+      <div className={`flex items-center justify-center gap-1 px-3 py-2 rounded-xl shrink-0 ml-2 ${
         item.destaque ? "bg-black/20" : "bg-black/40"
       }`}>
-        <span className="text-xl font-black text-white leading-none">{item.pts}</span>
-        <span className={`text-[9px] font-bold uppercase ${
+        <span className="text-lg md:text-xl font-black text-white leading-none">{item.pts}</span>
+        <span className={`text-[8px] md:text-[9px] font-bold uppercase ${
           item.destaque ? "text-white/60" : "text-slate-500"
         }`}>Pts</span>
       </div>
