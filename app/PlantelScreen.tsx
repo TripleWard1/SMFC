@@ -136,35 +136,38 @@ export default function PlantelScreen() {
           })}
         </div>
 
-        {/* --- PAINEL LATERAL PREMIUM (CORRIGIDO PARA MOBILE) --- */}
+        {/* --- PAINEL LATERAL PREMIUM (VERSÃO FINAL SEM ERROS) --- */}
         <AnimatePresence>
           {selectedPlayer && (
-            <>
-              {/* Overlay Escuro: Clicar aqui também fecha o menu */}
+            <div className="fixed inset-0 z-[999] flex justify-end">
+              {/* Overlay: Clicar aqui fecha sempre */}
               <motion.div 
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                exit={{ opacity: 0 }}
                 onClick={() => setSelectedPlayer(null)}
-                className="fixed inset-0 bg-black/90 backdrop-blur-md z-[110]" // Z-index alto para cobrir tudo
+                className="absolute inset-0 bg-black/90 backdrop-blur-md"
               />
               
               <motion.div 
-                initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
+                initial={{ x: '100%' }} 
+                animate={{ x: 0 }} 
+                exit={{ x: '100%' }}
                 transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                /* h-full e overflow-y-auto permitem o scroll vertical no telemóvel */
-                className="fixed inset-y-0 right-0 w-full md:w-[450px] bg-[#020617] border-l border-white/10 z-[120] flex flex-col shadow-2xl"
+                className="relative w-full md:w-[450px] h-full bg-[#020617] border-l border-white/10 flex flex-col shadow-2xl overflow-hidden"
               >
-                {/* Cabeçalho Fixo para o botão Voltar estar sempre visível */}
-                <div className="p-6 border-b border-white/5 bg-[#020617]/80 backdrop-blur-md sticky top-0 z-20">
+                {/* Botão Voltar Fixo no Topo */}
+                <div className="p-6 border-b border-white/5 bg-[#020617] z-20">
                   <button 
                     onClick={() => setSelectedPlayer(null)} 
-                    className="text-slate-500 uppercase text-[11px] font-black tracking-[0.3em] flex items-center gap-2 hover:text-white transition-colors active:scale-95"
+                    className="text-slate-500 uppercase text-[11px] font-black tracking-[0.3em] flex items-center gap-2 hover:text-white transition-colors"
                   >
                     <ArrowLeft size={18} className="text-red-600" /> Voltar ao Plantel
                   </button>
                 </div>
 
-                {/* Área de Conteúdo com Scroll Próprio */}
-                <div className="flex-1 overflow-y-auto p-8 pt-4 pb-24 custom-scrollbar">
+                {/* Conteúdo com Scroll Independente */}
+                <div className="flex-1 overflow-y-auto p-8 pt-4 pb-32">
                   
                   {/* Foto e Info Principal */}
                   <div className="relative mb-12 text-center">
@@ -177,7 +180,7 @@ export default function PlantelScreen() {
                     </div>
                   </div>
 
-                  {/* Grid de Stats Baseado na Imagem do Xandão */}
+                  {/* Grid de Stats (Xandão Style) */}
                   <div className="grid grid-cols-2 gap-4 mb-8">
                     <div className="bg-white/5 p-6 rounded-[2rem] border border-white/10 text-center">
                       <Trophy className="mx-auto mb-2 text-yellow-500/50" size={20} />
@@ -191,7 +194,7 @@ export default function PlantelScreen() {
                     </div>
                   </div>
 
-                  {/* Barra de Minutos Estilo App Mobile */}
+                  {/* Barra de Minutos */}
                   <div className="bg-white/[0.02] p-8 rounded-[2.5rem] border border-white/5 mb-8">
                     <div className="flex justify-between items-end mb-6">
                       <div>
@@ -205,13 +208,13 @@ export default function PlantelScreen() {
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
                       <motion.div 
                         initial={{ width: 0 }} 
-                        animate={{ width: `${(getPlayerStats(selectedPlayer).minutos / 900) * 100}%` }} 
+                        animate={{ width: `${Math.min((getPlayerStats(selectedPlayer).minutos / 1000) * 100, 100)}%` }} 
                         className="h-full bg-gradient-to-r from-red-600 to-red-400" 
                       />
                     </div>
                   </div>
 
-                  {/* Forma Recente VVED */}
+                  {/* Forma Recente */}
                   <div className="bg-white/[0.02] p-8 rounded-[2.5rem] border border-white/5">
                     <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-6">Forma Recente</h4>
                     <div className="flex gap-3 justify-center">
@@ -226,10 +229,9 @@ export default function PlantelScreen() {
                       ))}
                     </div>
                   </div>
-
                 </div>
               </motion.div>
-            </>
+            </div>
           )}
         </AnimatePresence>
 
