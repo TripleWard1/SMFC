@@ -16,8 +16,8 @@ const JORNADA_DATA = {
     status: "Finalizado"
   },
   proximoJogo: {
-    casa: "GD Figueiredo",
-    fora: "São Mamede",
+    casa: "São Mamede",
+    fora: "GD Figueiredo",
     data: "11 JAN",
     hora: "15:00",
     contagemRegressiva: "4D 12H 30M" // Texto que aparece no Hero
@@ -103,7 +103,7 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
 
   // 1. Lógica do Cronómetro Automático
   useEffect(() => {
-    const dataJogo = new Date('2026-01-11T15:00:00').getTime();
+    const dataJogo = new Date('2026-01-10T15:00:00').getTime();
     const timer = setInterval(() => {
       const agora = new Date().getTime();
       const distancia = dataJogo - agora;
@@ -309,6 +309,7 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
     </motion.div>
 
    {/* PRÓXIMO JOGO - DESIGN COM FOCO EM LEGIBILIDADE EXTREMA */}
+{/* PRÓXIMO JOGO - AGORA 100% AUTOMÁTICO */}
 <motion.div 
   initial={{ opacity: 0, y: 20 }} 
   whileInView={{ opacity: 1, y: 0 }}
@@ -322,26 +323,28 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
       <p className="text-2xl md:text-3xl font-black italic text-white tracking-tighter uppercase leading-none">Próximo Jogo</p>
     </div>
     <div className="shrink-0 bg-black/20 backdrop-blur-md border border-white/10 px-4 py-2 rounded-2xl">
-      <span className="text-[10px] md:text-xs font-black text-white uppercase tracking-widest">11 JAN • 15:00</span>
+      {/* LÊ AUTOMATICAMENTE A DATA E HORA DO TOPO */}
+      <span className="text-[10px] md:text-xs font-black text-white uppercase tracking-widest">
+        {JORNADA_DATA.proximoJogo.data} • {JORNADA_DATA.proximoJogo.hora}
+      </span>
     </div>
   </div>
 
   <div className="flex items-center justify-between relative z-10 py-2 w-full gap-2">
-    {/* Equipa Casa - GD FIGUEIREDO */}
+    {/* Equipa Casa - Lê automaticamente */}
     <div className="text-center flex-1 min-w-0">
       <img 
-        src={getLogo("GD Figueiredo")} 
+        src={getLogo(JORNADA_DATA.proximoJogo.casa)} 
         className="w-16 h-16 md:w-20 md:h-20 mx-auto object-contain drop-shadow-2xl mb-4" 
-        alt="GDF" 
+        alt="Casa" 
       />
       <div className="min-h-[2.5rem] flex items-center justify-center">
         <p className="text-[10px] md:text-[11px] font-black text-white uppercase tracking-wider leading-tight">
-          GD FIGUEIREDO
+          {JORNADA_DATA.proximoJogo.casa}
         </p>
       </div>
     </div>
     
-    {/* Centro VS */}
     <div className="flex flex-col items-center shrink-0 px-2 md:px-6">
       <div className="relative">
         <span className="text-3xl md:text-5xl font-black italic text-white/10 tracking-[0.1em]">VS</span>
@@ -350,16 +353,16 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
       <div className="h-0.5 w-8 md:w-16 bg-white/20 rounded-full mt-4" />
     </div>
 
-    {/* Equipa Fora - São Mamede */}
+    {/* Equipa Fora - Lê automaticamente */}
     <div className="text-center flex-1 min-w-0">
       <img 
-        src={getLogo("São Mamede")} 
+        src={getLogo(JORNADA_DATA.proximoJogo.fora)} 
         className="w-16 h-16 md:w-20 md:h-20 mx-auto object-contain drop-shadow-2xl mb-4" 
-        alt="SMFC" 
+        alt="Fora" 
       />
       <div className="min-h-[2.5rem] flex items-center justify-center">
         <p className="text-[10px] md:text-[11px] font-black text-white uppercase tracking-wider italic leading-tight">
-          S. MAMEDE
+          {JORNADA_DATA.proximoJogo.fora}
         </p>
       </div>
     </div>

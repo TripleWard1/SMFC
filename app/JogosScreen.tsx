@@ -64,25 +64,25 @@ export default function JogosScreen() {
 
   // --- CALENDÁRIO PRÓXIMOS JOGOS ---
   const proximosJogos = [
-    { date: '11/01/2026', time: '15:00', home: 'GD Figueiredo', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J11', local: '(F)' },
+    { date: '10/01/2026', time: '15:00', home: 'GD Figueiredo', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J11', local: '(F)' },
     { date: '17/01/2026', time: '14:00', home: "São Mamede d'Este FC", away: 'AD Oliveirense', comp: 'Taça AF Braga', jornada: 'Taça', local: '(C)' },
-    { date: '25/01/2026', time: '15:00', home: "São Mamede d'Este FC", away: 'ACD Serzedelo S. Pedro', comp: 'AF Braga 1ª Divisão B', jornada: 'J12', local: '(C)' },
+    { date: '25/01/2026', time: '15:00', home: 'ACD Serzedelo S. Pedro', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J12', local: '(F)' },
     { date: '01/02/2026', time: '15:00', home: "São Mamede d'Este FC", away: 'Maximinense', comp: 'AF Braga 1ª Divisão B', jornada: 'J13', local: '(C)' },
-    { date: '15/02/2026', time: '15:00', home: 'GD Pedralva', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J14', local: '(F)' },
-    { date: '22/02/2026', time: '15:00', home: "São Mamede d'Este FC", away: 'GD Peões', comp: 'AF Braga 1ª Divisão B', jornada: 'J15', local: '(C)' },
-    { date: '01/03/2026', time: '15:00', home: 'GDR Esporões', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J16', local: '(F)' },
-    { date: '08/03/2026', time: '15:00', home: "São Mamede d'Este FC", away: 'GD Guisande', comp: 'AF Braga 1ª Divisão B', jornada: 'J17', local: '(C)' },
-    { date: '15/03/2026', time: '15:00', home: 'Alegrienses', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J18', local: '(F)' },
-    { date: '22/03/2026', time: '15:00', home: "São Mamede d'Este FC", away: 'Arsenal da Devesa', comp: 'AF Braga 1ª Divisão B', jornada: 'J19', local: '(C)' },
-    { date: '29/03/2026', time: '16:00', home: 'Sobreposta', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J20', local: '(F)' },
+    { date: '15/02/2026', time: '15:00', home: "São Mamede d'Este FC", away: 'GD Pedralva', comp: 'AF Braga 1ª Divisão B', jornada: 'J14', local: '(C)' },
+    { date: '22/02/2026', time: '15:00', home: 'GD Peões', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J15', local: '(F)' },
+    { date: '01/03/2026', time: '15:00', home: "São Mamede d'Este FC", away: 'GDR Esporões', comp: 'AF Braga 1ª Divisão B', jornada: 'J16', local: '(C)' },
+    { date: '08/03/2026', time: '15:00', home: 'GD Guisande', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J17', local: '(F)' },
+    { date: '15/03/2026', time: '15:00', home: "São Mamede d'Este FC", away: 'Alegrienses', comp: 'AF Braga 1ª Divisão B', jornada: 'J18', local: '(C)' },
+    { date: '22/03/2026', time: '15:00', home: 'Arsenal da Devesa', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J19', local: '(F)' },
+    { date: '29/03/2026', time: '16:00', home: "São Mamede d'Este FC", away: 'Sobreposta', comp: 'AF Braga 1ª Divisão B', jornada: 'J20', local: '(C)' },
     { date: '12/04/2026', time: '16:00', home: "São Mamede d'Este FC", away: 'GD Sete Fontes', comp: 'AF Braga 1ª Divisão B', jornada: 'J21', local: '(C)' },
     { date: '19/04/2026', time: '16:00', home: 'Soarense', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J22', local: '(F)' },
     { date: '26/04/2026', time: '16:00', home: "São Mamede d'Este FC", away: 'Maria da Fonte B', comp: 'AF Braga 1ª Divisão B', jornada: 'J23', local: '(C)' },
     { date: '03/05/2026', time: '16:00', home: 'GD Figueiredo', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J24', local: '(F)' },
-    { date: '10/05/2026', time: '16:00', home: "São Mamede d'Este FC", away: 'ACD Serzedelo S. Pedro', comp: 'AF Braga 1ª Divisão B', jornada: 'J12', local: '(C)' },
-    { date: '17/05/2026', time: '16:00', home: 'Maximinense', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J13', local: '(F)' },
-  ];
-
+    { date: '10/05/2026', time: '16:00', home: "São Mamede d'Este FC", away: 'ACD Serzedelo S. Pedro', comp: 'AF Braga 1ª Divisão B', jornada: 'J25', local: '(C)' },
+    { date: '17/05/2026', time: '16:00', home: 'Maximinense', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J26', local: '(F)' },
+    { date: '28/06/2026', time: '14:30', home: "São Mamede d'Este FC", away: 'Terras de Bouro', comp: 'AF Braga Taça', jornada: '2E', local: '(C)' },
+];
   const getLogo = (teamName: string) => {
     if (!teamName) return LOGO_PADRAO;
     const nameToSearch = teamName.trim().toLowerCase();
