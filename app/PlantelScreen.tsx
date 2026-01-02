@@ -263,7 +263,7 @@ export default function PlantelScreen() {
                 <div className="hidden md:flex p-6 border-b border-white/5 bg-[#020617] justify-between items-center">
                   <button onClick={() => setSelectedPlayer(null)} className="text-slate-500 uppercase text-[11px] font-black tracking-[0.3em] flex items-center gap-2 hover:text-white transition-colors"><ArrowLeft size={18} className="text-red-600" /> Voltar</button>
                 </div>
-                <div className="flex-1 overflow-y-auto p-8 pt-10 pb-40">
+                <div className="flex-1 overflow-y-auto p-8 pt-24 md:pt-10 pb-40">
                   <div className="relative mb-12 text-center">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-red-600/10 blur-[100px] rounded-full" />
                     <img src={selectedPlayer.img} className="w-56 h-56 mx-auto rounded-3xl object-cover border border-white/10 shadow-2xl relative z-10" alt={selectedPlayer.name} />
