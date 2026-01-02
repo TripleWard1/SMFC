@@ -64,7 +64,7 @@ export default function JogosScreen() {
 
   // --- CALENDÁRIO PRÓXIMOS JOGOS ---
   const proximosJogos = [
-    { date: '10/01/2026', time: '15:00', home: 'GD Figueiredo', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J11', local: '(F)' },
+    { date: '10/01/2026', time: '15:00', home: "São Mamede d'Este FC", away: 'GD Figueiredo', comp: 'AF Braga 1ª Divisão B', jornada: 'J11', local: '(C)' },
     { date: '17/01/2026', time: '14:00', home: "São Mamede d'Este FC", away: 'AD Oliveirense', comp: 'Taça AF Braga', jornada: 'Taça', local: '(C)' },
     { date: '25/01/2026', time: '15:00', home: 'ACD Serzedelo S. Pedro', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J12', local: '(F)' },
     { date: '01/02/2026', time: '15:00', home: "São Mamede d'Este FC", away: 'Maximinense', comp: 'AF Braga 1ª Divisão B', jornada: 'J13', local: '(C)' },
