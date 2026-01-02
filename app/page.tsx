@@ -350,64 +350,59 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
       <h2 className="text-3xl font-black text-white uppercase tracking-tighter mt-1">Classificação</h2>
     </div>
 
-    {/* Lista de Classificação - Cards Verticais em Mobile */}
-    <div className="grid grid-cols-1 gap-4">
-      {JORNADA_DATA.classificacao.map((item, index) => (
-        <div 
-          key={index} 
-          className={`relative overflow-hidden flex items-center justify-between p-4 rounded-[1.8rem] transition-all ${
-            item.destaque 
-              ? "bg-gradient-to-br from-red-600 to-red-900 shadow-xl ring-1 ring-white/20" 
-              : "bg-white/[0.03] border border-white/5"
-          }`}
-        >
-          {/* Background Decorativo para o Destaque */}
-          {item.destaque && (
-            <div className="absolute right-0 top-0 w-24 h-24 bg-white/5 rounded-full -mr-10 -mt-10 blur-2xl" />
-          )}
-
-          <div className="flex items-center gap-4 flex-1 min-w-0 z-10">
-            {/* Posição com estilo Glass */}
-            <div className={`flex items-center justify-center w-10 h-10 rounded-2xl text-lg font-black italic shrink-0 ${
-              item.destaque ? "bg-black/20 text-white" : "bg-white/5 text-slate-500"
-            }`}>
-              {item.pos}
-            </div>
-            
-            {/* Logo e Nome */}
-            <div className="flex items-center gap-3 min-w-0">
-              <img 
-                src={getLogo(item.logo)} 
-                className="w-10 h-10 object-contain drop-shadow-lg" 
-                alt="Logo"
-              />
-              <div className="flex flex-col min-w-0">
-                <span className={`text-[13px] md:text-base font-black uppercase tracking-tight leading-none truncate ${
-                  item.destaque ? "text-white" : "text-slate-200"
-                }`}>
-                  {item.nome}
-                </span>
-                <span className={`text-[8px] font-bold uppercase tracking-widest mt-1 ${
-                  item.destaque ? "text-red-200/50" : "text-slate-600"
-                }`}>
-                  Campeonato Distrital
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Pontuação Estilo Badge */}
-          <div className={`flex flex-col items-center justify-center min-w-[50px] py-2 rounded-2xl z-10 ${
-            item.destaque ? "bg-white/10" : "bg-black/20"
-          }`}>
-            <span className="text-xl font-black text-white leading-none">{item.pts}</span>
-            <span className={`text-[8px] font-bold uppercase ${
-              item.destaque ? "text-white/60" : "text-slate-600"
-            }`}>Pts</span>
-          </div>
+    {/* Lista de Classificação - Nomes Completos e Design Comprido */}
+<div className="grid grid-cols-1 gap-4 w-full">
+  {JORNADA_DATA.classificacao.map((item, index) => (
+    <div 
+      key={index} 
+      className={`relative flex items-center justify-between p-5 md:p-6 rounded-[2.5rem] transition-all w-full ${
+        item.destaque 
+          ? "bg-gradient-to-r from-red-600 to-red-900 shadow-2xl ring-1 ring-white/20" 
+          : "bg-white/[0.03] border border-white/5"
+      }`}
+    >
+      <div className="flex items-center gap-4 flex-grow min-w-0">
+        {/* Posição */}
+        <div className={`flex items-center justify-center w-10 h-10 rounded-2xl text-lg font-black italic shrink-0 ${
+          item.destaque ? "bg-black/20 text-white" : "bg-white/5 text-slate-500"
+        }`}>
+          {item.pos}
         </div>
-      ))}
+        
+        {/* Logo */}
+        <img 
+          src={getLogo(item.logo)} 
+          className="w-10 h-10 md:w-12 md:h-12 object-contain shrink-0 drop-shadow-md" 
+          alt="Logo"
+        />
+
+        {/* Nome da Equipa - Sem restrição para não cortar */}
+        <div className="flex flex-col min-w-0 pr-2">
+          <span className={`text-[14px] md:text-base font-black uppercase tracking-tight leading-tight ${
+            item.destaque ? "text-white" : "text-slate-200"
+          }`}>
+            {item.nome}
+          </span>
+          <span className={`text-[8px] font-bold uppercase tracking-[0.15em] mt-1 ${
+            item.destaque ? "text-red-200/50" : "text-slate-600"
+          }`}>
+            Campeonato Distrital
+          </span>
+        </div>
+      </div>
+
+      {/* Pontuação - Badge fixo à direita */}
+      <div className={`flex items-center justify-center gap-1.5 px-4 py-2 rounded-2xl shrink-0 ${
+        item.destaque ? "bg-black/20" : "bg-black/40"
+      }`}>
+        <span className="text-xl font-black text-white leading-none">{item.pts}</span>
+        <span className={`text-[9px] font-bold uppercase ${
+          item.destaque ? "text-white/60" : "text-slate-500"
+        }`}>Pts</span>
+      </div>
     </div>
+  ))}
+</div>
 
     {/* Footer da Tabela */}
     <div className="mt-8 pt-6 border-t border-white/5 flex justify-center">
