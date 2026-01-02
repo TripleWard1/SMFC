@@ -136,76 +136,97 @@ export default function PlantelScreen() {
           })}
         </div>
 
-        {/* --- PAINEL LATERAL PREMIUM --- */}
+        {/* --- PAINEL LATERAL PREMIUM (CORRIGIDO PARA MOBILE) --- */}
         <AnimatePresence>
           {selectedPlayer && (
             <>
+              {/* Overlay Escuro: Clicar aqui também fecha o menu */}
               <motion.div 
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 onClick={() => setSelectedPlayer(null)}
-                className="fixed inset-0 bg-black/80 backdrop-blur-md z-[100]"
+                className="fixed inset-0 bg-black/90 backdrop-blur-md z-[110]" // Z-index alto para cobrir tudo
               />
+              
               <motion.div 
                 initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
                 transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="fixed inset-y-0 right-0 w-full md:w-[450px] bg-[#020617] border-l border-white/10 z-[110] p-8 overflow-y-auto shadow-2xl"
+                /* h-full e overflow-y-auto permitem o scroll vertical no telemóvel */
+                className="fixed inset-y-0 right-0 w-full md:w-[450px] bg-[#020617] border-l border-white/10 z-[120] flex flex-col shadow-2xl"
               >
-                <button onClick={() => setSelectedPlayer(null)} className="mb-8 text-slate-500 uppercase text-[10px] font-black tracking-[0.3em] flex items-center gap-2 hover:text-white transition-colors">
-                  <ArrowLeft size={16} /> Voltar ao Plantel
-                </button>
-
-                <div className="relative mb-12 text-center">
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-red-600/10 blur-[100px] rounded-full" />
-                  <img src={selectedPlayer.img} className="w-56 h-56 mx-auto rounded-3xl object-cover border border-white/10 shadow-2xl relative z-10" alt={selectedPlayer.name} />
-                  <div className="mt-8 relative z-10">
-                    <span className="text-red-600 font-black italic text-6xl opacity-20 absolute -top-6 left-0 w-full text-center">#{selectedPlayer.no}</span>
-                    <h2 className="text-4xl font-black italic text-white uppercase tracking-tighter leading-none mb-2">{selectedPlayer.name}</h2>
-                    <p className="text-slate-500 font-bold uppercase tracking-[0.4em] text-[10px]">{selectedPlayer.pos} • S. MAMEDE D'ESTE</p>
-                  </div>
+                {/* Cabeçalho Fixo para o botão Voltar estar sempre visível */}
+                <div className="p-6 border-b border-white/5 bg-[#020617]/80 backdrop-blur-md sticky top-0 z-20">
+                  <button 
+                    onClick={() => setSelectedPlayer(null)} 
+                    className="text-slate-500 uppercase text-[11px] font-black tracking-[0.3em] flex items-center gap-2 hover:text-white transition-colors active:scale-95"
+                  >
+                    <ArrowLeft size={18} className="text-red-600" /> Voltar ao Plantel
+                  </button>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 mb-8">
-                  <div className="bg-white/5 p-6 rounded-[2rem] border border-white/10 text-center group hover:bg-white/10 transition-colors">
-                    <Trophy className="mx-auto mb-2 text-yellow-500/50" size={20} />
-                    <span className="block text-4xl font-black text-white">{getPlayerStats(selectedPlayer).jogos}</span>
-                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Jogos</span>
+                {/* Área de Conteúdo com Scroll Próprio */}
+                <div className="flex-1 overflow-y-auto p-8 pt-4 pb-24 custom-scrollbar">
+                  
+                  {/* Foto e Info Principal */}
+                  <div className="relative mb-12 text-center">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-red-600/10 blur-[100px] rounded-full" />
+                    <img src={selectedPlayer.img} className="w-56 h-56 mx-auto rounded-3xl object-cover border border-white/10 shadow-2xl relative z-10" alt={selectedPlayer.name} />
+                    <div className="mt-8 relative z-10">
+                      <span className="text-red-600 font-black italic text-6xl opacity-10 absolute -top-6 left-0 w-full text-center">#{selectedPlayer.no}</span>
+                      <h2 className="text-4xl font-black italic text-white uppercase tracking-tighter leading-tight mb-2">{selectedPlayer.name}</h2>
+                      <p className="text-slate-500 font-bold uppercase tracking-[0.4em] text-[10px]">{selectedPlayer.pos} • S. MAMEDE D'ESTE</p>
+                    </div>
                   </div>
-                  <div className="bg-white/5 p-6 rounded-[2rem] border border-white/10 text-center group hover:bg-white/10 transition-colors">
-                    <Activity className="mx-auto mb-2 text-red-500/50" size={20} />
-                    <span className="block text-4xl font-black text-red-500">{getPlayerStats(selectedPlayer).golos}</span>
-                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Golos</span>
-                  </div>
-                </div>
 
-                <div className="bg-white/[0.02] p-8 rounded-[2.5rem] border border-white/5 mb-8">
-                  <div className="flex justify-between items-end mb-6">
-                    <div>
-                      <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-1">Minutos Jogados</h4>
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-5xl font-black text-white italic">{getPlayerStats(selectedPlayer).minutos}</span>
-                        <span className="text-slate-600 font-black text-sm uppercase">Min</span>
+                  {/* Grid de Stats Baseado na Imagem do Xandão */}
+                  <div className="grid grid-cols-2 gap-4 mb-8">
+                    <div className="bg-white/5 p-6 rounded-[2rem] border border-white/10 text-center">
+                      <Trophy className="mx-auto mb-2 text-yellow-500/50" size={20} />
+                      <span className="block text-4xl font-black text-white">{getPlayerStats(selectedPlayer).jogos}</span>
+                      <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Jogos</span>
+                    </div>
+                    <div className="bg-white/5 p-6 rounded-[2rem] border border-white/10 text-center">
+                      <Activity className="mx-auto mb-2 text-red-500/50" size={20} />
+                      <span className="block text-4xl font-black text-red-500">{getPlayerStats(selectedPlayer).golos}</span>
+                      <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Golos</span>
+                    </div>
+                  </div>
+
+                  {/* Barra de Minutos Estilo App Mobile */}
+                  <div className="bg-white/[0.02] p-8 rounded-[2.5rem] border border-white/5 mb-8">
+                    <div className="flex justify-between items-end mb-6">
+                      <div>
+                        <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-1">Minutos Jogados</h4>
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-5xl font-black text-white italic">{getPlayerStats(selectedPlayer).minutos}</span>
+                          <span className="text-slate-600 font-black text-sm uppercase">Min</span>
+                        </div>
                       </div>
                     </div>
-                    <Timer size={32} className="text-white/5" />
+                    <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                      <motion.div 
+                        initial={{ width: 0 }} 
+                        animate={{ width: `${(getPlayerStats(selectedPlayer).minutos / 900) * 100}%` }} 
+                        className="h-full bg-gradient-to-r from-red-600 to-red-400" 
+                      />
+                    </div>
                   </div>
-                  <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
-                    <motion.div initial={{ width: 0 }} animate={{ width: '75%' }} className="h-full bg-gradient-to-r from-red-600 to-red-400" />
-                  </div>
-                </div>
 
-                <div className="bg-white/[0.02] p-8 rounded-[2.5rem] border border-white/5">
-                  <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-6">Forma Recente (V-E-D)</h4>
-                  <div className="flex gap-3">
-                    {getPlayerStats(selectedPlayer).forma.map((res: string, i: number) => (
-                      <div key={i} className={`w-10 h-10 rounded-xl flex items-center justify-center text-xs font-black shadow-lg ${
-                        res === 'V' ? 'bg-green-500/20 text-green-500 border border-green-500/20' : 
-                        res === 'E' ? 'bg-slate-500/20 text-slate-500 border border-slate-500/20' : 
-                        res === 'D' ? 'bg-red-500/20 text-red-500 border border-red-500/20' : 'bg-white/5 text-slate-700'
-                      }`}>
-                        {res}
-                      </div>
-                    ))}
+                  {/* Forma Recente VVED */}
+                  <div className="bg-white/[0.02] p-8 rounded-[2.5rem] border border-white/5">
+                    <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-6">Forma Recente</h4>
+                    <div className="flex gap-3 justify-center">
+                      {getPlayerStats(selectedPlayer).forma.map((res: string, i: number) => (
+                        <div key={i} className={`w-10 h-10 rounded-xl flex items-center justify-center text-xs font-black ${
+                          res === 'V' ? 'bg-green-500/20 text-green-500 border border-green-500/20' : 
+                          res === 'E' ? 'bg-slate-500/20 text-slate-500 border border-slate-500/20' : 
+                          res === 'D' ? 'bg-red-500/20 text-red-500 border border-red-500/20' : 'bg-white/5 text-slate-700'
+                        }`}>
+                          {res}
+                        </div>
+                      ))}
+                    </div>
                   </div>
+
                 </div>
               </motion.div>
             </>
