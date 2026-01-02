@@ -43,7 +43,7 @@ const LOGOS_EQUIPAS: { [key: string]: string } = {
   'Maria da Fonte B': 'https://cdn-img.zerozero.pt/img/logos/equipas/3604_imgbank_1683533049.png',
   'M. Fonte B': 'https://cdn-img.zerozero.pt/img/logos/equipas/3604_imgbank_1683533049.png',
   'Ribeira do Neiva': 'https://cdn-img.zerozero.pt/img/logos/equipas/10950_imgbank.png',
-  'GD Figueiredo': 'https://cdn-img.zerozero.pt/img/logos/equipas/10946_imgbank.png',
+  'GD Figueiredo': 'https://cdn-img.zerozero.pt/img/logos/equipas/52/10952_logo_gd_figueiredo.jpg',
   'GD Os Alegrienses': 'https://cdn-img.zerozero.pt/img/logos/equipas/04/6704_logo_20230620104652_alegrienses.jpg',
   'Alegrienses': 'https://cdn-img.zerozero.pt/img/logos/equipas/04/6704_logo_20230620104652_alegrienses.jpg',
   'Maximinense': 'https://cdn-img.zerozero.pt/img/logos/equipas/10947_imgbank.png',
@@ -267,26 +267,43 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
       </div>
 
       {/* COLOCAR ISTO NO LUGAR: */}
-      <div className="flex items-center justify-between relative z-10 py-4 gap-1">
-  {/* Equipa Casa */}
-  <div className="text-center space-y-2 flex-1 min-w-0">
-    <img src={getLogo("GD Figueiredo")} className="w-12 h-12 md:w-20 md:h-20 mx-auto object-contain drop-shadow-2xl" alt="GDF" />
-    <p className="text-[9px] md:text-[11px] font-black text-white uppercase tracking-tight md:tracking-widest truncate px-1">Figueiredo</p>
-  </div>
-  
-  {/* Centro VS */}
-  <div className="flex flex-col items-center shrink-0 px-2">
-    <div className="relative">
-      <span className="text-3xl md:text-5xl font-black italic text-white/10 tracking-widest">VS</span>
-      <span className="absolute inset-0 flex items-center justify-center text-2xl md:text-4xl font-black italic text-white">VS</span>
+      <div className="flex items-center justify-between relative z-10 py-2 w-full gap-2">
+  {/* Equipa Casa (Adversário Passado) */}
+  <div className="text-center flex-1 min-w-0">
+    <img 
+      src={getLogo("Maria da Fonte B")} 
+      className="w-16 h-16 md:w-20 md:h-20 mx-auto object-contain drop-shadow-2xl mb-4" 
+      alt="SCMF" 
+    />
+    <div className="min-h-[2.5rem] flex items-center justify-center">
+      <p className="text-[10px] md:text-[11px] font-black text-white uppercase tracking-wider leading-tight">
+        M. Fonte B
+      </p>
     </div>
-    <div className="h-0.5 w-8 md:w-16 bg-white/20 rounded-full mt-2" />
   </div>
 
-  {/* Equipa Fora */}
-  <div className="text-center space-y-2 flex-1 min-w-0">
-    <img src={getLogo("São Mamede")} className="w-12 h-12 md:w-20 md:h-20 mx-auto object-contain drop-shadow-2xl" alt="SMFC" />
-    <p className="text-[9px] md:text-[11px] font-black text-white uppercase tracking-tight md:tracking-widest italic truncate px-1">S. Mamede</p>
+  {/* Centro - Resultado 0-0 */}
+  <div className="flex flex-col items-center shrink-0 px-2 md:px-6">
+    <div className="flex items-center gap-3">
+      <span className="text-3xl md:text-5xl font-black italic text-white">0</span>
+      <span className="text-xl font-black text-red-500">-</span>
+      <span className="text-3xl md:text-5xl font-black italic text-white">0</span>
+    </div>
+    <div className="h-[1px] w-8 md:w-16 bg-white/20 mt-4" />
+  </div>
+
+  {/* Equipa Fora (S. Mamede) */}
+  <div className="text-center flex-1 min-w-0">
+    <img 
+      src={getLogo("São Mamede")} 
+      className="w-16 h-16 md:w-20 md:h-20 mx-auto object-contain drop-shadow-2xl mb-4" 
+      alt="SMFC" 
+    />
+    <div className="min-h-[2.5rem] flex items-center justify-center">
+      <p className="text-[10px] md:text-[11px] font-black text-white uppercase tracking-wider italic leading-tight">
+        S. Mamede
+      </p>
+    </div>
   </div>
 </div>
     </motion.div>
@@ -310,17 +327,21 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
   </div>
 
   <div className="flex items-center justify-between relative z-10 py-2 w-full gap-2">
-    {/* Equipa Casa */}
+    {/* Equipa Casa - GD FIGUEIREDO */}
     <div className="text-center flex-1 min-w-0">
-      <img src={getLogo("GD Figueiredo")} className="w-16 h-16 md:w-20 md:h-20 mx-auto object-contain drop-shadow-2xl mb-4" alt="GDF" />
+      <img 
+        src={getLogo("GD Figueiredo")} 
+        className="w-16 h-16 md:w-20 md:h-20 mx-auto object-contain drop-shadow-2xl mb-4" 
+        alt="GDF" 
+      />
       <div className="min-h-[2.5rem] flex items-center justify-center">
         <p className="text-[10px] md:text-[11px] font-black text-white uppercase tracking-wider leading-tight">
-          Figueiredo
+          GD FIGUEIREDO
         </p>
       </div>
     </div>
     
-    {/* Centro VS - Reduzido para dar espaço aos nomes */}
+    {/* Centro VS */}
     <div className="flex flex-col items-center shrink-0 px-2 md:px-6">
       <div className="relative">
         <span className="text-3xl md:text-5xl font-black italic text-white/10 tracking-[0.1em]">VS</span>
@@ -329,12 +350,16 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
       <div className="h-0.5 w-8 md:w-16 bg-white/20 rounded-full mt-4" />
     </div>
 
-    {/* Equipa Fora - Agora com espaço para não cortar */}
+    {/* Equipa Fora - São Mamede */}
     <div className="text-center flex-1 min-w-0">
-      <img src={getLogo("São Mamede")} className="w-16 h-16 md:w-20 md:h-20 mx-auto object-contain drop-shadow-2xl mb-4" alt="SMFC" />
+      <img 
+        src={getLogo("São Mamede")} 
+        className="w-16 h-16 md:w-20 md:h-20 mx-auto object-contain drop-shadow-2xl mb-4" 
+        alt="SMFC" 
+      />
       <div className="min-h-[2.5rem] flex items-center justify-center">
         <p className="text-[10px] md:text-[11px] font-black text-white uppercase tracking-wider italic leading-tight">
-          S. Mamede
+          S. MAMEDE
         </p>
       </div>
     </div>
