@@ -17,8 +17,14 @@ const staff = [
   {
     id: 21,
     name: 'André Barros',
-    role: 'Treinador GUARDA REDES',
+    role: 'Treinador de Guarda-Redes',
     img: 'https://scontent.fopo5-1.fna.fbcdn.net/v/t39.30808-6/489925609_1144659601006178_1912458692516518724_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=127cfc&_nc_ohc=KJ8mbyWpEv0Q7kNvwGhjL0p&_nc_oc=AdmxJiHhebZo2aODh8TEC5AcezYBtWHndOS0OWfHZdMxtP7_2KNiWjqBUx62Ikyur9y9tNAAVBnCZeC4OE59Oabj&_nc_zt=23&_nc_ht=scontent.fopo5-1.fna&_nc_gid=HrcwXbCXQRgFbKkoSNbkQw&oh=00_AflGqc-37eCD5xat0doT2s57rUmi1q2pHOhHdvnsxCC8TA&oe=695A4B80',
+  },
+  {
+    id: 4,
+    name: 'Bertinho',
+    role: 'Fisioterapeuta',
+    img: 'https://scontent.fopo5-1.fna.fbcdn.net/v/t39.30808-6/516736377_1212112700927534_1344662142293995755_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=833d8c&_nc_ohc=PrtemUr3FOwQ7kNvwHwXEjj&_nc_oc=Adn6KncGRErijxt9h2JKMOZ5eIkNUycIzlSv2_cCV_bQR2Is54BDDUH4ukuk2mVlL83t4XYHxra3JLaQWXCtSWqK&_nc_zt=23&_nc_ht=scontent.fopo5-1.fna&_nc_gid=2a6q1_CnBlSc-0FHQEYnng&oh=00_AfojkJDkS1EqJ7-ZvmO00n776Ab0Mcn_Acx8MvGutIJz4Q&oe=695DBD2A',
   },
 ];
 
