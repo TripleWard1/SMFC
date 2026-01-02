@@ -14,7 +14,7 @@ const allPlayers = [
   { id: 7, name: 'Pedro Gonçalves', pos: 'Defesa', no: '16', img: 'https://cdn-img.zerozero.pt/img/jogadores/74/1022574__20230720145325_pedro_goncalves.png', nat: 'PT' },
   { id: 8, name: 'André Silva', pos: 'Defesa', no: '20', img: 'https://cdn-img.zerozero.pt/img/jogadores/new/55/48/545548_andre_silva_20250620095843.jpg', nat: 'PT' },
   { id: 9, name: 'Jorge Silva', pos: 'Defesa', no: '21', img: 'https://cdn-img.zerozero.pt/img/jogadores/new/11/90/661190_jorge_silva_20250602140333.jpg', nat: 'PT' },
-  { id: 10, name: 'Xandão', pos: 'Médio', no: '1', img: 'https://cdn-img.zerozero.pt/img/jogadores/new/76/93/1387693_xandao_20251121151125.jpg', nat: 'BR' },
+  { id: 10, name: 'Xandão', pos: 'Defesa', no: '1', img: 'https://cdn-img.zerozero.pt/img/jogadores/new/76/93/1387693_xandao_20251121151125.jpg', nat: 'BR' },
   { id: 11, name: 'Renato Gonçalves', pos: 'Médio', no: '2', img: 'https://cdn-img.zerozero.pt/img/jogadores/72/1022572__20230720145324_renato_goncalves.png', nat: 'PT' },
   { id: 12, name: 'Mota', pos: 'Médio', no: '8', img: 'https://cdn-img.zerozero.pt/img/jogadores/new/50/39/565039_mota_20250602140243.jpg', nat: 'PT' },
   { id: 13, name: 'André Pires', pos: 'Médio', no: '12', img: 'https://cdn-img.zerozero.pt/img/jogadores/new/24/42/462442_andre_pires_20250602140555.jpg', nat: 'PT' },
