@@ -266,28 +266,32 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
         <Trophy size={24} className="text-yellow-500/50 group-hover:text-yellow-500 transition-colors duration-500" />
       </div>
 
-      <div className="flex items-center justify-around relative z-10 py-4">
-        <div className="text-center space-y-4 flex-1">
-          <img src={getLogo("São Mamede")} className="w-20 h-20 mx-auto object-contain drop-shadow-2xl" alt="SMFC" />
-          <p className="text-[11px] font-black text-white/80 uppercase tracking-widest italic">S. Mamede</p>
-        </div>
+      {/* COLOCAR ISTO NO LUGAR: */}
+<div className="flex items-center justify-between relative z-10 py-4 gap-2">
+  {/* Equipa Casa */}
+  <div className="text-center space-y-2 flex-1 min-w-0">
+    <img src={getLogo("São Mamede")} className="w-12 h-12 md:w-20 md:h-20 mx-auto object-contain drop-shadow-2xl" alt="SMFC" />
+    <p className="text-[9px] md:text-[11px] font-black text-white/80 uppercase tracking-tight md:tracking-widest italic truncate">S. Mamede</p>
+  </div>
 
-        <div className="flex flex-col items-center px-6">
-        <div className="flex items-center gap-6 text-7xl font-black italic text-white">
-  <span>{JORNADA_DATA.ultimoJogo.goloCasa}</span>
-  <span className="text-3xl text-slate-700">:</span>
-  <span>{JORNADA_DATA.ultimoJogo.goloFora}</span>
+  {/* Placar Central */}
+  <div className="flex flex-col items-center shrink-0">
+    <div className="flex items-center gap-3 md:gap-6 text-4xl md:text-7xl font-black italic text-white">
+      <span>{JORNADA_DATA.ultimoJogo.goloCasa}</span>
+      <span className="text-xl md:text-3xl text-slate-700">:</span>
+      <span>{JORNADA_DATA.ultimoJogo.goloFora}</span>
+    </div>
+    <div className="mt-4 px-3 py-1 bg-white/5 border border-white/10 rounded-full">
+      <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Finalizado</span>
+    </div>
+  </div>
+
+  {/* Equipa Fora */}
+  <div className="text-center space-y-2 flex-1 min-w-0">
+    <img src={getLogo("Maria da Fonte B")} className="w-12 h-12 md:w-20 md:h-20 mx-auto object-contain drop-shadow-2xl" alt="MFB" />
+    <p className="text-[9px] md:text-[11px] font-black text-white/40 uppercase tracking-tight md:tracking-widest truncate">M. Fonte B</p>
+  </div>
 </div>
-          <div className="mt-6 px-6 py-1.5 bg-white/5 border border-white/10 rounded-full">
-            <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Finalizado</span>
-          </div>
-        </div>
-
-        <div className="text-center space-y-4 flex-1">
-          <img src={getLogo("Maria da Fonte B")} className="w-20 h-20 mx-auto object-contain drop-shadow-2xl" alt="MFB" />
-          <p className="text-[11px] font-black text-white/40 uppercase tracking-widest">M. Fonte B</p>
-        </div>
-      </div>
     </motion.div>
 
     {/* PRÓXIMO JOGO - CORRIGIDO "EM DIRETO" */}
@@ -351,19 +355,19 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
 
     {/* Lista de Classificação - Vertical para não cortar nomes */}
     <div className="space-y-3">
-  {JORNADA_DATA.classificacao.map((item, index) => (
-    <div key={index} className={`flex items-center justify-between p-5 rounded-2xl transition-all ${item.destaque ? "bg-gradient-to-r from-red-600 to-red-800 shadow-xl ring-1 ring-white/30" : "bg-white/[0.02] border border-white/5"}`}>
-      <div className="flex items-center gap-5">
-        <span className={`text-xl font-black italic w-8 ${item.destaque ? "text-white/40" : "text-slate-700"}`}>{item.pos}</span>
-        <img src={getLogo(item.logo)} className={`w-10 h-10 object-contain ${item.destaque ? "brightness-0 invert" : "opacity-50"}`} />
-        <span className={`text-sm font-bold uppercase tracking-wide ${item.destaque ? "text-white" : "text-slate-300"}`}>{item.nome}</span>
-      </div>
-      <div className={`flex items-center gap-3 px-4 py-2 rounded-xl ${item.destaque ? "bg-black/20" : ""}`}>
-        <span className="text-xl font-black text-white">{item.pts}</span>
-        <span className={`text-[10px] font-bold uppercase ${item.destaque ? "text-white/70" : "text-slate-600"}`}>Pts</span>
-      </div>
+    {JORNADA_DATA.classificacao.map((item, index) => (
+  <div key={index} className={`flex items-center justify-between p-4 md:p-5 rounded-2xl transition-all ${item.destaque ? "bg-gradient-to-r from-red-600 to-red-800 shadow-xl ring-1 ring-white/30" : "bg-white/[0.02] border border-white/5"}`}>
+    <div className="flex items-center gap-3 md:gap-5 flex-1 min-w-0">
+      <span className={`text-lg md:text-xl font-black italic w-6 md:w-8 shrink-0 ${item.destaque ? "text-white/40" : "text-slate-700"}`}>{item.pos}</span>
+      <img src={getLogo(item.logo)} className={`w-8 h-8 md:w-10 md:h-10 object-contain shrink-0 ${item.destaque ? "" : "opacity-50"}`} />
+      <span className={`text-[11px] md:text-sm font-bold uppercase tracking-wide truncate ${item.destaque ? "text-white" : "text-slate-300"}`}>{item.nome}</span>
     </div>
-  ))}
+    <div className={`flex items-center gap-2 ml-2 shrink-0 px-3 py-1.5 rounded-xl ${item.destaque ? "bg-black/20" : ""}`}>
+      <span className="text-lg md:text-xl font-black text-white">{item.pts}</span>
+      <span className={`text-[9px] md:text-[10px] font-bold uppercase ${item.destaque ? "text-white/70" : "text-slate-600"}`}>Pts</span>
+    </div>
+  </div>
+))}
 </div>
 
     {/* Footer da Tabela */}
