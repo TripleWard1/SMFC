@@ -350,18 +350,50 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
   </div>
 </div>
 
-{/* Lista de Classificação Corrigida */}
-<div className="space-y-2">
+{/* Lista de Classificação - Uniforme e Larga */}
+<div className="flex flex-col gap-3 w-full">
   {JORNADA_DATA.classificacao.map((item, index) => (
-    <div key={index} className={`flex items-center justify-between p-3 md:p-5 rounded-xl transition-all ${item.destaque ? "bg-gradient-to-r from-red-600 to-red-800 shadow-lg" : "bg-white/[0.02] border border-white/5"}`}>
-      <div className="flex items-center gap-2 md:gap-5 flex-1 min-w-0">
-        <span className={`text-base md:text-xl font-black italic w-5 shrink-0 ${item.destaque ? "text-white/40" : "text-slate-700"}`}>{item.pos}</span>
-        <img src={getLogo(item.logo)} className={`w-7 h-7 md:w-10 md:h-10 object-contain shrink-0 ${item.destaque ? "" : "opacity-60"}`} />
-        <span className={`text-[10px] md:text-sm font-bold uppercase tracking-wide truncate ${item.destaque ? "text-white" : "text-slate-300"}`}>{item.nome}</span>
+    <div 
+      key={index} 
+      className={`flex items-center justify-between w-full p-4 md:p-6 rounded-2xl transition-all ${
+        item.destaque 
+          ? "bg-gradient-to-r from-red-600 to-red-800 shadow-xl ring-1 ring-white/30" 
+          : "bg-white/[0.03] border border-white/10"
+      }`}
+    >
+      {/* Lado Esquerdo: Pos + Logo + Nome */}
+      <div className="flex items-center gap-4 md:gap-6 flex-1 min-w-0">
+        <span className={`text-lg md:text-2xl font-black italic w-6 md:w-10 shrink-0 ${
+          item.destaque ? "text-white/40" : "text-slate-700"
+        }`}>
+          {item.pos}
+        </span>
+        
+        <img 
+          src={getLogo(item.logo)} 
+          className={`w-9 h-9 md:w-12 md:h-12 object-contain shrink-0 ${
+            item.destaque ? "brightness-110" : "opacity-70"
+          }`} 
+          alt="Logo"
+        />
+        
+        <span className={`text-[12px] md:text-base font-black uppercase tracking-wider truncate ${
+          item.destaque ? "text-white" : "text-slate-200"
+        }`}>
+          {item.nome}
+        </span>
       </div>
-      <div className={`flex items-center gap-1.5 ml-2 shrink-0 px-2 py-1 rounded-lg ${item.destaque ? "bg-black/20" : ""}`}>
-        <span className="text-base md:text-xl font-black text-white">{item.pts}</span>
-        <span className={`text-[8px] md:text-[10px] font-bold uppercase ${item.destaque ? "text-white/70" : "text-slate-600"}`}>Pts</span>
+
+      {/* Lado Direito: Pontos */}
+      <div className={`flex items-center gap-2 ml-4 shrink-0 px-4 py-2 rounded-xl ${
+        item.destaque ? "bg-black/20" : "bg-white/5"
+      }`}>
+        <span className="text-xl md:text-2xl font-black text-white">{item.pts}</span>
+        <span className={`text-[10px] md:text-[12px] font-bold uppercase ${
+          item.destaque ? "text-white/70" : "text-slate-500"
+        }`}>
+          Pts
+        </span>
       </div>
     </div>
   ))}
