@@ -29,15 +29,18 @@ const LOGOS_EQUIPAS: { [key: string]: string } = {
   Sobreposta: 'https://cdn-img.zerozero.pt/img/logos/equipas/99/32399_logo_sobreposta.jpg',
   'Arsenal da Devesa': 'https://cdn-img.zerozero.pt/img/logos/equipas/10951_imgbank.png',
   Alegrienses: 'https://cdn-img.zerozero.pt/img/logos/equipas/04/6704_logo_20230620104652_alegrienses.jpg',
-  'AD Oliveirense': 'https://cdn-img.zerozero.pt/img/logos/equipas/10940_imgbank.png',
+  'AD Oliveirense': 'https://cdn-img.zerozero.pt/img/logos/equipas/3557_imgbank.png',
 };
 
 const LOGO_PADRAO = 'https://via.placeholder.com/100?text=ESCUDO';
+
+
 
 export default function JogosScreen() {
   const [jogos, setJogos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeSubTab, setActiveSubTab] = useState('Resultados');
+  const [filtroCompeticao, setFiltroCompeticao] = useState('Todas');
 
   const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQmNe82uPD4n31biJ89tmpvFXHW9F7cYXy5GxgqWf0em9cveQzO2Y2bzyAyLC_1RQ5v7tBP8ahO74Ci/pub?output=csv';
 
@@ -62,6 +65,7 @@ export default function JogosScreen() {
   // --- CALENDÁRIO PRÓXIMOS JOGOS ---
   const proximosJogos = [
     { date: '11/01/2026', time: '15:00', home: 'GD Figueiredo', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J11', local: '(F)' },
+    { date: '17/01/2026', time: '15:00', home: "São Mamede d'Este FC", away: 'AD Oliveirense', comp: 'Taça AF Braga', jornada: 'Taça', local: '(C)' },
     { date: '25/01/2026', time: '15:00', home: "São Mamede d'Este FC", away: 'ACD Serzedelo S. Pedro', comp: 'AF Braga 1ª Divisão B', jornada: 'J12', local: '(C)' },
     { date: '01/02/2026', time: '15:00', home: "São Mamede d'Este FC", away: 'Maximinense', comp: 'AF Braga 1ª Divisão B', jornada: 'J13', local: '(C)' },
     { date: '15/02/2026', time: '15:00', home: 'GD Pedralva', away: "São Mamede d'Este FC", comp: 'AF Braga 1ª Divisão B', jornada: 'J14', local: '(F)' },
@@ -259,10 +263,35 @@ export default function JogosScreen() {
             </motion.div>
           )}
 
-          {activeSubTab === 'Proximos' && (
+{activeSubTab === 'Proximos' && (
             <motion.div key="proximos" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="grid gap-4">
-              {proximosJogos.map((jogo, i) => (
+              
+              {/* --- NOVO TOGGLE DE FILTRO --- */}
+              <div className="flex gap-2 mb-2 bg-white/5 p-1 rounded-xl w-fit border border-white/10">
+                {['Todas', 'Campeonato', 'Taça'].map((f) => (
+                  <button
+                    key={f}
+                    onClick={() => setFiltroCompeticao(f)}
+                    className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${
+                      filtroCompeticao === f ? 'bg-red-600 text-white' : 'text-slate-500 hover:text-white'
+                    }`}
+                  >
+                    {f}
+                  </button>
+                ))}
+              </div>
+
+              {/* --- LISTA FILTRADA --- */}
+              {proximosJogos
+                .filter(jogo => {
+                  if (filtroCompeticao === 'Todas') return true;
+                  if (filtroCompeticao === 'Campeonato') return jogo.comp.includes('1ª Divisão');
+                  if (filtroCompeticao === 'Taça') return jogo.comp.includes('Taça');
+                  return true;
+                })
+                .map((jogo, i) => (
                 <div key={i} className="bg-white/5 border border-white/10 p-5 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6">
+                  {/* ... resto do teu código do card de jogo (não mudas nada para baixo) ... */}
                   <div className="flex items-center gap-4">
                     <div className="bg-red-600/10 p-3 rounded-xl border border-red-600/20 text-red-500 font-black text-xs uppercase text-center min-w-[60px]">{jogo.jornada}</div>
                     <div>
