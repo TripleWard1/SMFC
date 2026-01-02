@@ -136,17 +136,17 @@ export default function PlantelScreen() {
           })}
         </div>
 
-        {/* --- PAINEL LATERAL PREMIUM (VERSÃO FINAL SEM ERROS) --- */}
+        {/* --- PAINEL LATERAL PREMIUM CORRIGIDO (FECHO E SCROLL) --- */}
         <AnimatePresence>
           {selectedPlayer && (
             <div className="fixed inset-0 z-[999] flex justify-end">
-              {/* Overlay: Clicar aqui fecha sempre */}
+              {/* Camada de fundo: Clicar aqui fecha o painel obrigatoriamente */}
               <motion.div 
                 initial={{ opacity: 0 }} 
                 animate={{ opacity: 1 }} 
                 exit={{ opacity: 0 }}
                 onClick={() => setSelectedPlayer(null)}
-                className="absolute inset-0 bg-black/90 backdrop-blur-md"
+                className="absolute inset-0 bg-black/90 backdrop-blur-md cursor-pointer"
               />
               
               <motion.div 
@@ -156,17 +156,25 @@ export default function PlantelScreen() {
                 transition={{ type: 'spring', damping: 25, stiffness: 200 }}
                 className="relative w-full md:w-[450px] h-full bg-[#020617] border-l border-white/10 flex flex-col shadow-2xl overflow-hidden"
               >
-                {/* Botão Voltar Fixo no Topo */}
-                <div className="p-6 border-b border-white/5 bg-[#020617] z-20">
+                {/* Cabeçalho Fixo com botão de fechar */}
+                <div className="p-6 border-b border-white/5 bg-[#020617] flex justify-between items-center">
                   <button 
                     onClick={() => setSelectedPlayer(null)} 
                     className="text-slate-500 uppercase text-[11px] font-black tracking-[0.3em] flex items-center gap-2 hover:text-white transition-colors"
                   >
-                    <ArrowLeft size={18} className="text-red-600" /> Voltar ao Plantel
+                    <ArrowLeft size={18} className="text-red-600" /> Voltar
+                  </button>
+                  
+                  {/* Botão extra de fechar no canto (X) para mobile */}
+                  <button 
+                    onClick={() => setSelectedPlayer(null)}
+                    className="md:hidden p-2 text-slate-400 hover:text-white"
+                  >
+                    <ShieldCheck size={20} className="rotate-45" /> {/* Usando ícone que já tens para não dar erro */}
                   </button>
                 </div>
 
-                {/* Conteúdo com Scroll Independente */}
+                {/* Área de Conteúdo com Scroll */}
                 <div className="flex-1 overflow-y-auto p-8 pt-4 pb-32">
                   
                   {/* Foto e Info Principal */}
@@ -180,7 +188,7 @@ export default function PlantelScreen() {
                     </div>
                   </div>
 
-                  {/* Grid de Stats (Xandão Style) */}
+                  {/* Estatísticas (Xandão Style) */}
                   <div className="grid grid-cols-2 gap-4 mb-8">
                     <div className="bg-white/5 p-6 rounded-[2rem] border border-white/10 text-center">
                       <Trophy className="mx-auto mb-2 text-yellow-500/50" size={20} />
@@ -194,7 +202,7 @@ export default function PlantelScreen() {
                     </div>
                   </div>
 
-                  {/* Barra de Minutos */}
+                  {/* Barra de Minutos baseada na imagem que enviaste */}
                   <div className="bg-white/[0.02] p-8 rounded-[2.5rem] border border-white/5 mb-8">
                     <div className="flex justify-between items-end mb-6">
                       <div>
@@ -214,7 +222,7 @@ export default function PlantelScreen() {
                     </div>
                   </div>
 
-                  {/* Forma Recente */}
+                  {/* Forma Recente (VVED) */}
                   <div className="bg-white/[0.02] p-8 rounded-[2.5rem] border border-white/5">
                     <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-6">Forma Recente</h4>
                     <div className="flex gap-3 justify-center">
@@ -229,6 +237,7 @@ export default function PlantelScreen() {
                       ))}
                     </div>
                   </div>
+
                 </div>
               </motion.div>
             </div>
