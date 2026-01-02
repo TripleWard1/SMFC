@@ -291,44 +291,55 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
 </div>
     </motion.div>
 
-    {/* PRÓXIMO JOGO - CORRIGIDO "EM DIRETO" */}
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }} 
-      whileInView={{ opacity: 1, y: 0 }}
-      className="group relative bg-gradient-to-br from-red-700 to-red-950 rounded-[3rem] p-10 lg:p-12 overflow-hidden shadow-2xl"
-    >
-      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 mix-blend-overlay" />
-      
-      <div className="flex justify-between items-center mb-12 relative z-10">
-        <div className="space-y-1">
-          <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/60">Agendamento</h3>
-          <p className="text-3xl font-black italic text-white tracking-tighter uppercase">Próximo Jogo</p>
-        </div>
-        <div className="bg-black/20 backdrop-blur-md border border-white/10 px-5 py-2 rounded-2xl">
-          <span className="text-xs font-black text-white uppercase tracking-widest">11 JAN • 15:00</span>
-        </div>
-      </div>
+   {/* PRÓXIMO JOGO - DESIGN COM FOCO EM LEGIBILIDADE EXTREMA */}
+<motion.div 
+  initial={{ opacity: 0, y: 20 }} 
+  whileInView={{ opacity: 1, y: 0 }}
+  className="group relative bg-gradient-to-br from-red-700 to-red-950 rounded-[3rem] p-8 md:p-12 overflow-hidden shadow-2xl"
+>
+  <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 mix-blend-overlay" />
+  
+  <div className="flex justify-between items-start mb-10 relative z-10 gap-4">
+    <div className="space-y-1">
+      <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/60">Agendamento</h3>
+      <p className="text-2xl md:text-3xl font-black italic text-white tracking-tighter uppercase leading-none">Próximo Jogo</p>
+    </div>
+    <div className="shrink-0 bg-black/20 backdrop-blur-md border border-white/10 px-4 py-2 rounded-2xl">
+      <span className="text-[10px] md:text-xs font-black text-white uppercase tracking-widest">11 JAN • 15:00</span>
+    </div>
+  </div>
 
-      <div className="flex items-center justify-around relative z-10 py-4">
-        <div className="text-center space-y-4 flex-1">
-          <img src={getLogo("GD Figueiredo")} className="w-20 h-20 mx-auto object-contain drop-shadow-2xl" alt="GDF" />
-          <p className="text-[11px] font-black text-white uppercase tracking-widest">Figueiredo</p>
-        </div>
-        
-        <div className="px-6 flex flex-col items-center">
-          <div className="relative">
-            <span className="text-5xl font-black italic text-white/10 tracking-[0.2em]">VS</span>
-            <span className="absolute inset-0 flex items-center justify-center text-4xl font-black italic text-white tracking-[0.1em]">VS</span>
-          </div>
-          <div className="h-1 w-16 bg-white/20 rounded-full mt-6" />
-        </div>
-
-        <div className="text-center space-y-4 flex-1">
-          <img src={getLogo("São Mamede")} className="w-20 h-20 mx-auto object-contain drop-shadow-2xl" alt="SMFC" />
-          <p className="text-[11px] font-black text-white uppercase tracking-widest italic">S. Mamede</p>
-        </div>
+  <div className="flex items-center justify-between relative z-10 py-2 w-full gap-2">
+    {/* Equipa Casa */}
+    <div className="text-center flex-1 min-w-0">
+      <img src={getLogo("GD Figueiredo")} className="w-16 h-16 md:w-20 md:h-20 mx-auto object-contain drop-shadow-2xl mb-4" alt="GDF" />
+      <div className="min-h-[2.5rem] flex items-center justify-center">
+        <p className="text-[10px] md:text-[11px] font-black text-white uppercase tracking-wider leading-tight">
+          Figueiredo
+        </p>
       </div>
-    </motion.div>
+    </div>
+    
+    {/* Centro VS - Reduzido para dar espaço aos nomes */}
+    <div className="flex flex-col items-center shrink-0 px-2 md:px-6">
+      <div className="relative">
+        <span className="text-3xl md:text-5xl font-black italic text-white/10 tracking-[0.1em]">VS</span>
+        <span className="absolute inset-0 flex items-center justify-center text-2xl md:text-4xl font-black italic text-white">VS</span>
+      </div>
+      <div className="h-0.5 w-8 md:w-16 bg-white/20 rounded-full mt-4" />
+    </div>
+
+    {/* Equipa Fora - Agora com espaço para não cortar */}
+    <div className="text-center flex-1 min-w-0">
+      <img src={getLogo("São Mamede")} className="w-16 h-16 md:w-20 md:h-20 mx-auto object-contain drop-shadow-2xl mb-4" alt="SMFC" />
+      <div className="min-h-[2.5rem] flex items-center justify-center">
+        <p className="text-[10px] md:text-[11px] font-black text-white uppercase tracking-wider italic leading-tight">
+          S. Mamede
+        </p>
+      </div>
+    </div>
+  </div>
+</motion.div>
   </div>
 
  {/* --- ÁREA DE CLASSIFICAÇÃO (DESIGN MOBILE-FIRST) --- */}
