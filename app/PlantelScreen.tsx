@@ -136,11 +136,11 @@ export default function PlantelScreen() {
           })}
         </div>
 
-        {/* --- PAINEL LATERAL PREMIUM CORRIGIDO (FECHO E SCROLL) --- */}
+        {/* --- PAINEL LATERAL PREMIUM CORRIGIDO (BOTÃO MOBILE REPOSICIONADO) --- */}
 <AnimatePresence>
   {selectedPlayer && (
     <div className="fixed inset-0 z-[999] flex justify-end">
-      {/* Camada de fundo: Clicar aqui fecha o painel obrigatoriamente */}
+      {/* Overlay */}
       <motion.div 
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
@@ -156,19 +156,19 @@ export default function PlantelScreen() {
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
         className="relative w-full md:w-[450px] h-full bg-[#020617] border-l border-white/10 flex flex-col shadow-2xl overflow-hidden"
       >
-        {/* BOTÃO DE FECHAR MOBILE (Visível apenas em Mobile) */}
-        <div className="md:hidden absolute top-4 right-4 z-[130]">
+        {/* BOTÃO DE FECHAR MOBILE - REPOSICIONADO PARA BAIXO */}
+        <div className="md:hidden fixed bottom-8 right-6 z-[1000]">
           <button 
             onClick={() => setSelectedPlayer(null)}
-            className="p-3 bg-red-600 rounded-full text-white shadow-lg active:scale-90 transition-transform"
+            className="flex items-center gap-2 px-6 py-4 bg-red-600 text-white rounded-full font-black uppercase tracking-widest text-[10px] shadow-[0_10px_30px_rgba(220,38,38,0.4)] active:scale-95 transition-all"
           >
-            {/* Usando ShieldCheck rotacionado como X para manter compatibilidade com teus imports */}
-            <ShieldCheck size={24} className="rotate-45" /> 
+            {/* Ícone que já tens importado */}
+            <ArrowLeft size={16} /> Fechar
           </button>
         </div>
 
-        {/* Cabeçalho Fixo */}
-        <div className="p-6 border-b border-white/5 bg-[#020617] flex justify-between items-center">
+        {/* Cabeçalho (Oculto no mobile se necessário, mas mantido para Desktop) */}
+        <div className="hidden md:flex p-6 border-b border-white/5 bg-[#020617] justify-between items-center">
           <button 
             onClick={() => setSelectedPlayer(null)} 
             className="text-slate-500 uppercase text-[11px] font-black tracking-[0.3em] flex items-center gap-2 hover:text-white transition-colors"
@@ -178,9 +178,9 @@ export default function PlantelScreen() {
         </div>
 
         {/* Área de Conteúdo com Scroll */}
-        <div className="flex-1 overflow-y-auto p-8 pt-4 pb-32">
+        <div className="flex-1 overflow-y-auto p-8 pt-10 pb-40"> {/* pb-40 para o conteúdo não ficar por baixo do botão novo */}
           
-          {/* Foto e Info Principal */}
+          {/* Foto e Info Principal conforme as tuas imagens */}
           <div className="relative mb-12 text-center">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-red-600/10 blur-[100px] rounded-full" />
             <img src={selectedPlayer.img} className="w-56 h-56 mx-auto rounded-3xl object-cover border border-white/10 shadow-2xl relative z-10" alt={selectedPlayer.name} />
@@ -191,7 +191,7 @@ export default function PlantelScreen() {
             </div>
           </div>
 
-          {/* Estatísticas (Xandão Style) */}
+          {/* Grid de Stats - 10 Jogos / 1 Golo */}
           <div className="grid grid-cols-2 gap-4 mb-8">
             <div className="bg-white/5 p-6 rounded-[2rem] border border-white/10 text-center">
               <Trophy className="mx-auto mb-2 text-yellow-500/50" size={20} />
@@ -205,7 +205,7 @@ export default function PlantelScreen() {
             </div>
           </div>
 
-          {/* Barra de Minutos */}
+          {/* Barra de 888 Minutos */}
           <div className="bg-white/[0.02] p-8 rounded-[2.5rem] border border-white/5 mb-8">
             <div className="flex justify-between items-end mb-6">
               <div>
@@ -225,9 +225,9 @@ export default function PlantelScreen() {
             </div>
           </div>
 
-          {/* Forma Recente (VVED) */}
+          {/* Forma Recente VVEDE */}
           <div className="bg-white/[0.02] p-8 rounded-[2.5rem] border border-white/5">
-            <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-6">Forma Recente</h4>
+            <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-6 text-center">Forma Recente</h4>
             <div className="flex gap-3 justify-center">
               {getPlayerStats(selectedPlayer).forma.map((res: string, i: number) => (
                 <div key={i} className={`w-10 h-10 rounded-xl flex items-center justify-center text-xs font-black ${
