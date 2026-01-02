@@ -4,16 +4,50 @@ import { ArrowRight, ShieldCheck, Timer, UserCircle, Trophy, Calendar, ListOrder
 import { useState, useEffect } from 'react';
 import LandingScreen from './LandingScreen';
 
-// Variável de controlo global (fora do componente)
+// ========================================================
+// 🟢 CENTRAL DE DADOS (EDITA APENAS ESTES VALORES)
+// ========================================================
+const JORNADA_DATA = {
+  ultimoJogo: {
+    casa: "São Mamede",
+    fora: "Maria da Fonte B",
+    goloCasa: 0,
+    goloFora: 0,
+    status: "Finalizado"
+  },
+  proximoJogo: {
+    casa: "GD Figueiredo",
+    fora: "São Mamede",
+    data: "11 JAN",
+    hora: "15:00",
+    contagemRegressiva: "4D 12H 30M" // Texto que aparece no Hero
+  },
+  classificacao: [
+    { pos: "05", nome: "Maria da Fonte B", pts: 17, logo: "Maria da Fonte B" },
+    { pos: "06", nome: "São Mamede d'Este", pts: 17, logo: "São Mamede", destaque: true },
+    { pos: "07", nome: "Alegrienses", pts: 15, logo: "Alegrienses" }
+  ]
+};
+// ========================================================
+
 let hasEntered = false;
 
+// --- DICIONÁRIO DE EQUIPAS (LOGOS) ---
 // --- DICIONÁRIO DE EQUIPAS (LOGOS) ---
 const LOGOS_EQUIPAS: { [key: string]: string } = {
   "São Mamede d'Este FC": 'https://cdn-img.zerozero.pt/img/logos/equipas/10945_imgbank.png',
   "São Mamede": 'https://cdn-img.zerozero.pt/img/logos/equipas/10945_imgbank.png',
-  'Maria da Fonte B': 'https://cdn-img.zerozero.pt/img/logos/equipas/3604_imgbank_1683533049.png',
+  "São Mamede d'Este": 'https://cdn-img.zerozero.pt/img/logos/equipas/10945_imgbank.png',
+  "S. Mamede": 'https://cdn-img.zerozero.pt/img/logos/equipas/10945_imgbank.png',
   'Este FC': 'https://cdn-img.zerozero.pt/img/logos/equipas/10944_imgbank.png',
+  'Maria da Fonte B': 'https://cdn-img.zerozero.pt/img/logos/equipas/3604_imgbank_1683533049.png',
+  'M. Fonte B': 'https://cdn-img.zerozero.pt/img/logos/equipas/3604_imgbank_1683533049.png',
   'Ribeira do Neiva': 'https://cdn-img.zerozero.pt/img/logos/equipas/10950_imgbank.png',
+  'GD Figueiredo': 'https://cdn-img.zerozero.pt/img/logos/equipas/10946_imgbank.png',
+  'GD Os Alegrienses': 'https://cdn-img.zerozero.pt/img/logos/equipas/04/6704_logo_20230620104652_alegrienses.jpg',
+  'Alegrienses': 'https://cdn-img.zerozero.pt/img/logos/equipas/04/6704_logo_20230620104652_alegrienses.jpg',
+  'Maximinense': 'https://cdn-img.zerozero.pt/img/logos/equipas/10947_imgbank.png',
+  'GD Pedralva': 'https://cdn-img.zerozero.pt/img/logos/equipas/10949_imgbank.png',
 };
 
 const LOGO_PADRAO = 'https://via.placeholder.com/100?text=ESCUDO';
@@ -65,29 +99,46 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
     return foundEntry ? foundEntry[1] : LOGO_PADRAO;
   };
 
+  const [timeLeft, setTimeLeft] = useState("");
+
+  // 1. Lógica do Cronómetro Automático
+  useEffect(() => {
+    const dataJogo = new Date('2026-01-11T15:00:00').getTime();
+    const timer = setInterval(() => {
+      const agora = new Date().getTime();
+      const distancia = dataJogo - agora;
+
+      if (distancia < 0) {
+        setTimeLeft("JOGO A DECORRER");
+        clearInterval(timer);
+        return;
+      }
+
+      const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+      const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+      setTimeLeft(`${dias}D ${horas}H ${minutos}M`);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // 2. Lógica de Navegação das Abas (IMPORTANTE - NÃO APAGAR)
   useEffect(() => {
     const handleMudarAba = (event: any) => {
       const destino = event.detail;
+      const subAbasJogos = ['Resultados', 'Proximos', 'Classificação', 'Próximos'];
+      const abaPrincipal = subAbasJogos.includes(destino) ? 'Jogos' : destino;
   
-      // Se o destino for uma sub-aba, o componente pai tem de mudar para 'Jogos'
-      const abaPrincipal = ['Jogos', 'Resultados', 'Proximos', 'Classificação'].includes(destino) 
-        ? 'Jogos' 
-        : destino;
-  
-      // Tentamos encontrar a função de mudar aba independentemente do nome (setTab ou setActiveTab)
-      const mudarPara = (typeof setTab === 'function') ? setTab : 
-                        (typeof setActiveTab === 'function') ? setActiveTab : 
-                        null;
-  
-      if (mudarPara) {
-        mudarPara(abaPrincipal);
+      if (typeof setTab === 'function') {
+        setTab(abaPrincipal);
       }
     };
   
     window.addEventListener('mudarAba', handleMudarAba);
     return () => window.removeEventListener('mudarAba', handleMudarAba);
-  }, []); // Removemos a dependência daqui para evitar o erro 87:6
+  }, [setTab]);
 
+  // 3. Função de Entrada (IMPORTANTE - NÃO APAGAR)
   const handleEnter = () => {
     hasEntered = true;
     setIsLanding(false);
@@ -127,8 +178,8 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
               <div className="mb-8 inline-flex items-center gap-3 px-6 py-2 bg-red-600/10 border border-red-600/20 rounded-full">
                 <Timer size={14} className="text-red-500" />
                 <span className="text-[10px] font-black uppercase tracking-[0.3em] text-red-500">
-                  Próximo Jogo: 4D 12H 30M
-                </span>
+  Próximo Jogo: {timeLeft || "A CALCULAR..."}
+</span>
               </div>
               <h1 className="text-[13vw] font-black italic uppercase leading-[0.75] tracking-tighter text-white">
                 SÃO MAMEDE
@@ -195,142 +246,133 @@ export default function HomePage({ setTab }: { setTab: (id: string) => void }) {
               ))}
             </div>
 
-            {/* SEPARADOR 1 */}
-            <div className="relative py-20">
-              <div className="absolute inset-0 flex items-center" aria-hidden="true"><div className="w-full border-t border-white/5"></div></div>
-              <div className="relative flex justify-center"><div className="bg-[#020617] px-4"><div className="w-2 h-2 bg-red-600 rotate-45"></div></div></div>
-            </div>
+            {/* --- ÁREA DE JOGO E TABELA ULTRA-PREMIUM (VERSÃO CORRIGIDA E ESPAÇADA) --- */}
+<div className="relative mt-20 space-y-12 px-4">
+  
+  {/* GRID DE CONFRONTOS: MAIS ESPAÇO E RESPIRAÇÃO */}
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-7xl mx-auto">
+    
+    {/* ÚLTIMO CONFRONTO */}
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }} 
+      whileInView={{ opacity: 1, y: 0 }}
+      className="group relative bg-[#0f172a]/60 backdrop-blur-2xl border border-white/5 rounded-[3rem] p-10 lg:p-12 overflow-hidden shadow-2xl"
+    >
+      <div className="flex justify-between items-center mb-12 relative z-10">
+        <div className="space-y-1">
+          <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-red-500">Resumo da Jornada</h3>
+          <p className="text-3xl font-black italic text-white tracking-tighter uppercase">Último Resultado</p>
+        </div>
+        <Trophy size={24} className="text-yellow-500/50 group-hover:text-yellow-500 transition-colors duration-500" />
+      </div>
 
-            {/* ÚLTIMO RESULTADO */}
-            <div className="max-w-3xl mx-auto">
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="bg-white/5 border border-white/10 rounded-3xl p-6 md:p-8 relative overflow-hidden group">
-                <div className="absolute top-0 right-0 p-4 opacity-10"><Trophy size={80} className="text-white" /></div>
-                <div className="text-center mb-8"><span className="text-[10px] font-black uppercase tracking-[0.3em] text-red-500">Último Confronto</span></div>
-                <div className="flex items-center justify-between gap-2 md:gap-8">
-                  <div className="flex-1 flex flex-col items-center gap-3">
-                    <img src={getLogo("São Mamede")} alt="S. Mamede" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
-                    <h5 className="text-[10px] md:text-sm font-black uppercase italic text-white text-center">S. Mamede</h5>
-                  </div>
-                  <div className="flex items-center gap-3 md:gap-4 bg-[#020617] px-5 py-3 rounded-2xl border border-white/10 shadow-xl">
-                    <span className="text-3xl md:text-5xl font-black italic text-white">0</span>
-                    <span className="text-xl font-bold text-red-600">-</span>
-                    <span className="text-3xl md:text-5xl font-black italic text-white">0</span>
-                  </div>
-                  <div className="flex-1 flex flex-col items-center gap-3">
-                    <img src={getLogo("Maria da Fonte B")} alt="Maria da Fonte B" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
-                    <h5 className="text-[10px] md:text-sm font-black uppercase italic text-white text-center">M. Fonte B</h5>
-                  </div>
-                </div>
-                <div className="mt-10 flex justify-center">
-                  <button 
-                    onClick={() => window.dispatchEvent(new CustomEvent('mudarAba', { detail: 'Resultados' }))} 
-                    className="flex items-center gap-3 px-8 py-3 bg-red-600 hover:bg-red-700 rounded-full transition-all group shadow-lg shadow-red-600/20"
-                  >
-                    <span className="text-[10px] font-black uppercase tracking-widest text-white">Ver Todos os Resultados</span>
-                    <ArrowRight size={14} className="text-white group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </div>
-              </motion.div>
-            </div>
+      <div className="flex items-center justify-around relative z-10 py-4">
+        <div className="text-center space-y-4 flex-1">
+          <img src={getLogo("São Mamede")} className="w-20 h-20 mx-auto object-contain drop-shadow-2xl" alt="SMFC" />
+          <p className="text-[11px] font-black text-white/80 uppercase tracking-widest italic">S. Mamede</p>
+        </div>
 
-            {/* SEPARADOR 2 */}
-            <div className="relative py-20">
-              <div className="absolute inset-0 flex items-center" aria-hidden="true"><div className="w-full border-t border-white/5"></div></div>
-              <div className="relative flex justify-center"><div className="bg-[#020617] px-4"><div className="w-2 h-2 bg-red-600 rotate-45"></div></div></div>
-            </div>
+        <div className="flex flex-col items-center px-6">
+        <div className="flex items-center gap-6 text-7xl font-black italic text-white">
+  <span>{JORNADA_DATA.ultimoJogo.goloCasa}</span>
+  <span className="text-3xl text-slate-700">:</span>
+  <span>{JORNADA_DATA.ultimoJogo.goloFora}</span>
+</div>
+          <div className="mt-6 px-6 py-1.5 bg-white/5 border border-white/10 rounded-full">
+            <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">Finalizado</span>
+          </div>
+        </div>
 
-            {/* PRÓXIMO JOGO */}
-            <div className="max-w-3xl mx-auto">
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="bg-white/5 border border-white/10 rounded-3xl p-6 md:p-8 relative overflow-hidden group">
-                <div className="absolute top-0 right-0 p-4 opacity-10"><Calendar size={80} className="text-white" /></div>
-                <div className="text-center mb-8"><span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500">Próximo Jogo</span></div>
-                <div className="flex items-center justify-between gap-2 md:gap-8">
-                  <div className="flex-1 flex flex-col items-center gap-3">
-                    <img src={getLogo("São Mamede")} alt="S. Mamede" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
-                    <h5 className="text-[10px] md:text-sm font-black uppercase italic text-white text-center">S. Mamede</h5>
-                  </div>
-                  <div className="flex flex-col items-center gap-1">
-                    <span className="text-2xl md:text-4xl font-black text-white">VS</span>
-                    <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">22 Fev • 15:00</span>
-                  </div>
-                  <div className="flex-1 flex flex-col items-center gap-3">
-                    <img src={getLogo("Este FC")} alt="Este FC" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
-                    <h5 className="text-[10px] md:text-sm font-black uppercase italic text-white text-center">Este FC</h5>
-                  </div>
-                </div>
-                <div className="mt-10 flex justify-center">
-                <button 
-  onClick={() => {
-    // Primeiro abre a página de Jogos
-    window.dispatchEvent(new CustomEvent('mudarAba', { detail: 'Jogos' }));
-    // Pequeno atraso para dar tempo aos Jogos de carregarem e ouvirem o segundo comando
-    setTimeout(() => {
-      window.dispatchEvent(new CustomEvent('mudarAba', { detail: 'Proximos' }));
-    }, 50);
-  }} 
-  className="flex items-center gap-3 px-8 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition-all group"
+        <div className="text-center space-y-4 flex-1">
+          <img src={getLogo("Maria da Fonte B")} className="w-20 h-20 mx-auto object-contain drop-shadow-2xl" alt="MFB" />
+          <p className="text-[11px] font-black text-white/40 uppercase tracking-widest">M. Fonte B</p>
+        </div>
+      </div>
+    </motion.div>
+
+    {/* PRÓXIMO JOGO - CORRIGIDO "EM DIRETO" */}
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }} 
+      whileInView={{ opacity: 1, y: 0 }}
+      className="group relative bg-gradient-to-br from-red-700 to-red-950 rounded-[3rem] p-10 lg:p-12 overflow-hidden shadow-2xl"
+    >
+      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 mix-blend-overlay" />
+      
+      <div className="flex justify-between items-center mb-12 relative z-10">
+        <div className="space-y-1">
+          <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/60">Agendamento</h3>
+          <p className="text-3xl font-black italic text-white tracking-tighter uppercase">Próximo Jogo</p>
+        </div>
+        <div className="bg-black/20 backdrop-blur-md border border-white/10 px-5 py-2 rounded-2xl">
+          <span className="text-xs font-black text-white uppercase tracking-widest">11 JAN • 15:00</span>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-around relative z-10 py-4">
+        <div className="text-center space-y-4 flex-1">
+          <img src={getLogo("GD Figueiredo")} className="w-20 h-20 mx-auto object-contain drop-shadow-2xl" alt="GDF" />
+          <p className="text-[11px] font-black text-white uppercase tracking-widest">Figueiredo</p>
+        </div>
+        
+        <div className="px-6 flex flex-col items-center">
+          <div className="relative">
+            <span className="text-5xl font-black italic text-white/10 tracking-[0.2em]">VS</span>
+            <span className="absolute inset-0 flex items-center justify-center text-4xl font-black italic text-white tracking-[0.1em]">VS</span>
+          </div>
+          <div className="h-1 w-16 bg-white/20 rounded-full mt-6" />
+        </div>
+
+        <div className="text-center space-y-4 flex-1">
+          <img src={getLogo("São Mamede")} className="w-20 h-20 mx-auto object-contain drop-shadow-2xl" alt="SMFC" />
+          <p className="text-[11px] font-black text-white uppercase tracking-widest italic">S. Mamede</p>
+        </div>
+      </div>
+    </motion.div>
+  </div>
+
+  {/* --- ÁREA DE CLASSIFICAÇÃO (LISTA VERTICAL PARA MÁXIMA LEGIBILIDADE) --- */}
+<motion.div 
+  initial={{ opacity: 0, y: 30 }} 
+  whileInView={{ opacity: 1, y: 0 }}
+  className="max-w-4xl mx-auto relative px-4 mt-20"
 >
-  <span className="text-[10px] font-black uppercase tracking-widest text-white">Ver Próximos Encontros</span>
-  <ArrowRight size={14} className="text-white group-hover:translate-x-1 transition-transform" />
-</button>
-                </div>
-              </motion.div>
-            </div>
+  <div className="relative bg-[#0a0f1e]/90 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-6 md:p-10 shadow-2xl">
+    
+    {/* Cabeçalho */}
+    <div className="flex items-center justify-between mb-8 border-l-4 border-red-600 pl-5">
+      <div className="flex flex-col">
+        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-500">Performance</span>
+        <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Classificação</h2>
+      </div>
+      <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest bg-white/5 px-3 py-1 rounded-full">
+        Série B
+      </div>
+    </div>
 
-            {/* SEPARADOR 3 */}
-            <div className="relative py-20">
-              <div className="absolute inset-0 flex items-center" aria-hidden="true"><div className="w-full border-t border-white/5"></div></div>
-              <div className="relative flex justify-center"><div className="bg-[#020617] px-4"><div className="w-2 h-2 bg-red-600 rotate-45"></div></div></div>
-            </div>
+    {/* Lista de Classificação - Vertical para não cortar nomes */}
+    <div className="space-y-3">
+  {JORNADA_DATA.classificacao.map((item, index) => (
+    <div key={index} className={`flex items-center justify-between p-5 rounded-2xl transition-all ${item.destaque ? "bg-gradient-to-r from-red-600 to-red-800 shadow-xl ring-1 ring-white/30" : "bg-white/[0.02] border border-white/5"}`}>
+      <div className="flex items-center gap-5">
+        <span className={`text-xl font-black italic w-8 ${item.destaque ? "text-white/40" : "text-slate-700"}`}>{item.pos}</span>
+        <img src={getLogo(item.logo)} className={`w-10 h-10 object-contain ${item.destaque ? "brightness-0 invert" : "opacity-50"}`} />
+        <span className={`text-sm font-bold uppercase tracking-wide ${item.destaque ? "text-white" : "text-slate-300"}`}>{item.nome}</span>
+      </div>
+      <div className={`flex items-center gap-3 px-4 py-2 rounded-xl ${item.destaque ? "bg-black/20" : ""}`}>
+        <span className="text-xl font-black text-white">{item.pts}</span>
+        <span className={`text-[10px] font-bold uppercase ${item.destaque ? "text-white/70" : "text-slate-600"}`}>Pts</span>
+      </div>
+    </div>
+  ))}
+</div>
 
-            {/* CLASSIFICAÇÃO CURTA */}
-            <div className="max-w-3xl mx-auto">
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="bg-white/5 border border-white/10 rounded-3xl p-6 md:p-8 relative overflow-hidden group">
-                <div className="absolute top-0 right-0 p-4 opacity-10"><ListOrdered size={80} className="text-white" /></div>
-                <div className="text-center mb-8"><span className="text-[10px] font-black uppercase tracking-[0.3em] text-yellow-500">A Nossa Posição</span></div>
-                
-                <div className="space-y-2 relative z-10">
-                  {/* Equipa Cima */}
-                  <div className="flex items-center gap-4 p-3 bg-white/5 rounded-xl opacity-60 scale-95 origin-center">
-                    <span className="text-xs font-black text-slate-500 w-4">4º</span>
-                    <img src={getLogo("Este FC")} className="w-6 h-6 object-contain" />
-                    <span className="text-[10px] font-bold text-white uppercase flex-1">Este FC</span>
-                    <span className="text-xs font-black text-white">25 pts</span>
-                  </div>
-                  {/* SÃO MAMEDE */}
-                  <div className="flex items-center gap-4 p-4 bg-red-600 rounded-xl shadow-lg shadow-red-600/20 ring-1 ring-white/20">
-                    <span className="text-sm font-black text-white w-4">5º</span>
-                    <img src={getLogo("São Mamede")} className="w-8 h-8 object-contain" />
-                    <span className="text-xs font-black text-white uppercase flex-1 italic">São Mamede d'Este</span>
-                    <span className="text-sm font-black text-white">22 pts</span>
-                  </div>
-                  {/* Equipa Baixo */}
-                  <div className="flex items-center gap-4 p-3 bg-white/5 rounded-xl opacity-60 scale-95 origin-center">
-                    <span className="text-xs font-black text-slate-500 w-4">6º</span>
-                    <img src={getLogo("Ribeira do Neiva")} className="w-6 h-6 object-contain" />
-                    <span className="text-[10px] font-bold text-white uppercase flex-1">Ribeira do Neiva</span>
-                    <span className="text-xs font-black text-white">21 pts</span>
-                  </div>
-                </div>
-
-                <div className="mt-10 flex justify-center">
-                <button 
-  onClick={() => {
-    // Primeiro abre a página de Jogos
-    window.dispatchEvent(new CustomEvent('mudarAba', { detail: 'Jogos' }));
-    // Pequeno atraso para a aba de jogos "acordar"
-    setTimeout(() => {
-      window.dispatchEvent(new CustomEvent('mudarAba', { detail: 'Classificação' }));
-    }, 50);
-  }} 
-  className="flex items-center gap-3 px-8 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition-all group"
->
-  <span className="text-[10px] font-black uppercase tracking-widest text-white">Ver Classificação Completa</span>
-  <ArrowRight size={14} className="text-white group-hover:translate-x-1 transition-transform" />
-</button>
-                </div>
-              </motion.div>
-            </div>
+    {/* Footer da Tabela */}
+    <div className="mt-8 pt-6 border-t border-white/5 flex justify-center">
+      <p className="text-[9px] font-medium text-slate-600 uppercase tracking-[0.2em]">Última atualização: Hoje às 15:00</p>
+    </div>
+  </div>
+</motion.div>
+</div>
           </section>
 
           <footer className="border-t border-white/5 py-20 bg-[#020617] px-6 text-center">

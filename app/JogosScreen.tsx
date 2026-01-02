@@ -152,30 +152,23 @@ export default function JogosScreen() {
           };
           return parseDate(b.date) - parseDate(a.date);
         }));
-      } catch (error) { console.error('Erro:', error); } finally { setLoading(false); }
+      } catch (error) { 
+        console.error('Erro:', error); 
+      } finally { 
+        setLoading(false); 
+      }
     };
     fetchJogos();
   }, []);
 
-useEffect(() => {
-    const handleNavigation = (event: any) => {
-      const target = event.detail;
-      // Se a ordem for para uma destas sub-abas, o componente de Jogos muda internamente
-      if (['Resultados', 'Proximos', 'Classificação'].includes(target)) {
-        setActiveSubTab(target);
-      }
-    };
-
-    window.addEventListener('mudarAba', handleNavigation);
-    return () => window.removeEventListener('mudarAba', handleNavigation);
-  }, [setActiveSubTab]);
-
-  // 2. LOGICA PARA OUVIR A HOME (O que faltava no teu código)
+  // 2. LOGICA PARA OUVIR A HOME
   useEffect(() => {
     const handleNavigation = (e: any) => {
       const target = e.detail;
-      if (['Resultados', 'Proximos', 'Classificação'].includes(target)) {
-        setActiveSubTab(target);
+      // Normalização para evitar erros de acento vindo da Home
+      const abaFinal = target === 'Próximos' ? 'Proximos' : target;
+      if (['Resultados', 'Proximos', 'Classificação'].includes(abaFinal)) {
+        setActiveSubTab(abaFinal);
       }
     };
     window.addEventListener('mudarAba', handleNavigation);
@@ -198,7 +191,6 @@ useEffect(() => {
         {['Resultados', 'Próximos', 'Classificação'].map((tab) => (
   <button
     key={tab}
-    // Ajuste aqui para normalizar o nome da aba
     onClick={() => setActiveSubTab(tab === 'Próximos' ? 'Proximos' : tab)}
     className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
       (activeSubTab === tab || (activeSubTab === 'Proximos' && tab === 'Próximos')) 
